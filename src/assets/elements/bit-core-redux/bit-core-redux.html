@@ -1,0 +1,76 @@
+<script src="../../bower_components/redux/index.js"></script>
+
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
+
+<dom-module id='bit-core-redux'>
+	<template>
+			<iron-localstorage
+				name="[[localStorageKey]]"
+				value="{{state}}"
+				on-iron-localstorage-load="_initializeStore"
+				on-iron-localstorage-load-empty="_initializeStore">
+			</iron-localstorage>
+
+			<iron-signals
+				on-iron-signal-redux-action="_onAction">
+			</iron-signals>
+	</template>
+</dom-module>
+
+<script>
+(function () {
+	'use strict';
+
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-core-redux';
+			this.hostAttributes = {
+				hidden: true
+			};
+			this.properties = {
+				localStorageKey:{
+					type: String
+				},
+				reducers:{
+					type: Object
+				},
+				state: {
+					type: Object,
+					notify: true
+
+				}
+			};
+		}
+
+		detached(){
+			this._unsubscribeStore();
+		}
+
+		_initializeStore() {
+			if(this.store){
+				return;
+			}
+			this.store = window.Redux.createStore(
+				window.Redux.combineReducers(this.reducers),
+				this.state || {}
+			);
+			this._unsubscribeStore = this.store.subscribe(this._storeUpdated.bind(this));
+			this._storeUpdated();
+		}
+
+		_storeUpdated(){
+			this.state = this.store.getState();
+		}
+
+		_onAction(e){
+			if(!this.store){
+				console.warn('Trying to dispatch and action before the store was initialized');
+				return;
+			}
+			this.store.dispatch(e.detail);
+		}
+	}
+	Polymer(Class);
+})();
+</script>

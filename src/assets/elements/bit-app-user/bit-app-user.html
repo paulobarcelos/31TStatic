@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bit-core-reducers/bit-core-reducers.html">
+<link rel="import" href="../bit-core-redux/bit-core-redux.html">
+<link rel="import" href="../bit-core-flavors-loader/bit-core-flavors-loader.html">
+
+<dom-module id='bit-app-user'>
+	<style></style>
+	<template>
+
+		<bit-core-reducers
+			on-reducers-changed="_combineReducers">
+		</bit-core-reducers>
+
+		<bit-core-redux
+			local-storage-key="bit-app-user"
+			reducers="[[reducers]]"
+			state="{{state}}">
+		</bit-core-redux>
+
+		<bit-core-flavors-loader
+			api-url="[[apiUrl]]"
+			updated-at="[[state.flavorsUpdatedAt]]">
+		</bit-core-flavors-loader>
+
+	</template>
+</dom-module>
+
+<script>
+(function () {
+
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-app-user'
+			this.properties = {
+				apiUrl:{
+					type: String
+				},
+				reducers:{
+					type: Object
+				},
+				state:{
+					type: Object
+				}
+			}
+		}
+
+		_combineReducers(e){
+			this.reducers = Object.assign({}, this.reducers, e.detail.value)
+		}
+	}
+	Polymer(Class);
+})();
+</script>

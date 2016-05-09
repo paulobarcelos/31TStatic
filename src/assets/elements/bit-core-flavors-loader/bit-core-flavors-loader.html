@@ -1,0 +1,67 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bit-core-redux/bit-core-redux-dispatcher.html">
+<link rel="import" href="../bit-core-reducers/action-types.html">
+
+<dom-module id='bit-core-flavors-loader'>
+	<template>
+		<iron-ajax
+			url="[[apiUrl]]flavors"
+			id="loader"
+			last-response="{{response}}">
+		</iron-ajax>
+		<bit-core-redux-dispatcher
+			id="reduxDispatcher">
+		</bit-core-redux-dispatcher>
+	</template>
+</dom-module>
+
+<script>
+(function () {
+
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-core-flavors-loader';
+			this.hostAttributes = {
+				hidden: true
+			};
+			this.properties = {
+				apiUrl:{
+					type: String
+				},
+				updatedAt:{
+					type: Number,
+					observer: '_updatedAtChanged'
+				},
+				cacheExpiration: {
+					type: Number,
+					value: 60 * 60 * 1000
+				},
+				response:{
+					type: Object,
+					observer: '_responseChanged'
+				}
+			};
+		}
+
+		_updatedAtChanged(updatedAt){
+			if(Date.now() - updatedAt < this.cacheExpiration){
+				return;
+			}
+			this.$.loader.generateRequest();
+		}
+
+		_responseChanged(response){
+			this.$.reduxDispatcher.dispatch(
+				window.BIT.ActionTypes.SET_FLAVORS,
+				{
+					flavors: response,
+					updatedAt: Date.now()
+				}
+			);
+		}
+	}
+	Polymer(Class);
+})();
+</script>

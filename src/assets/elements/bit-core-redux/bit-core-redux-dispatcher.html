@@ -1,0 +1,29 @@
+<script src="../../bower_components/redux/index.js"></script>
+
+<script>
+(function () {
+	'use strict';
+
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-core-redux-dispatcher';
+			this.hostAttributes = {
+				hidden: true
+			};
+		}
+
+		dispatch(type, payload){
+			this.fire('iron-signal',
+				{
+					name: 'redux-action',
+					data: {
+						type,
+						payload
+					}
+				}
+			);
+		}
+	}
+	Polymer(Class);
+})();
+</script>
