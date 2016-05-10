@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bit-ui-single-flavor/bit-ui-single-flavor.html">
+
+<dom-module id='bit-ui-flavor-scroller'>
+	<style>
+		:host{
+			display: block;
+			overflow-x: scroll;
+		}
+		:host .container{
+			width: auto;
+			white-space: nowrap
+		}
+	</style>
+	<template>
+		<div class="container">
+			<template
+				is="dom-repeat"
+				items="[[flavors]]">
+				<bit-ui-single-flavor
+					assets-url="[[assetsUrl]]"
+					flavor="[[item]]">
+				</bit-ui-single-flavor>
+			</template>
+		</div>
+	</template>
+</dom-module>
+
+<script>
+(function () {
+	'use strict';
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-flavor-scroller';
+			this.hostAttributes = {
+
+			};
+			this.properties = {
+				flavors: {
+					type: Array
+				},
+				assetsUrl:{
+					type: String
+				}
+			};
+		}
+	}
+	Polymer(Class);
+})();
+</script>

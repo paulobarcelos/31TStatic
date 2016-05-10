@@ -1,43 +1,64 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<link rel="import" href="../bit-core-reducers/bit-core-reducers.html">
-<link rel="import" href="../bit-core-redux/bit-core-redux.html">
+<link rel="import" href="../bit-core-persistent-store/bit-core-persistent-store.html">
+<link rel="import" href="../bit-core-reducer-adder/bit-core-reducer-adder.html">
 <link rel="import" href="../bit-core-flavors-loader/bit-core-flavors-loader.html">
+
+<link rel="import" href="../bit-ui-flavor-scroller/bit-ui-flavor-scroller.html">
 
 <dom-module id='bit-app-user'>
 	<style></style>
 	<template>
 
-		<bit-core-reducers
-			on-reducers-changed="_combineReducers">
-		</bit-core-reducers>
+		<bit-core-persistent-store
+			local-storage-key="bit-app-user">
+		</bit-core-persistent-store>
 
-		<bit-core-redux
-			local-storage-key="bit-app-user"
-			reducers="[[reducers]]"
-			state="{{state}}">
-		</bit-core-redux>
+		<bit-core-reducer-adder
+			reducers="[[reducers]]">
+		</bit-core-reducer-adder>
 
-		<bit-core-flavors-loader
-			api-url="[[apiUrl]]"
-			updated-at="[[state.flavorsUpdatedAt]]">
+		<bit-core-flavors-loader>
 		</bit-core-flavors-loader>
+
+		<bit-ui-flavor-scroller
+			flavors="[[state.flavors]]"
+			assets-url="[[rootUrl]]assets/">
+		</bit-ui-flavor-scroller>
 
 	</template>
 </dom-module>
 
 <script>
-(function () {
+(() => {
+	const {	reducers } = window.BIT.Redux
+	const {
+		setApiEndpoint,
+		setRootEndpoint,
+		setHomeEndpoint } = window.BIT.Redux.actions.endpoints
 
 	class Class {
 		beforeRegister() {
 			this.is = 'bit-app-user'
 			this.properties = {
 				apiUrl:{
-					type: String
+					type: String,
+					observer: '_apiUrlChanged'
+				},
+				rootUrl:{
+					type: String,
+					observer: '_rootUrlChanged'
+				},
+				homeUrl:{
+					type: String,
+					observer: '_homeUrlChanged'
 				},
 				reducers:{
-					type: Object
+					type: Object,
+					value: {
+						...reducers.flavors,
+						...reducers.endpoints
+					}
 				},
 				state:{
 					type: Object
@@ -45,8 +66,14 @@
 			}
 		}
 
-		_combineReducers(e){
-			this.reducers = Object.assign({}, this.reducers, e.detail.value)
+		_apiUrlChanged(endpoint){
+			this.async(()=>setApiEndpoint(endpoint))
+		}
+		_rootUrlChanged(endpoint){
+			this.async(()=>setRootEndpoint(endpoint))
+		}
+		_homeUrlChanged(endpoint){
+			this.async(()=>setHomeEndpoint(endpoint))
 		}
 	}
 	Polymer(Class);

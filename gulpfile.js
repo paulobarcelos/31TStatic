@@ -37,28 +37,32 @@ var AUTOPREFIXER_BROWSERS = [
 /**
  * Lint JavaScript fom SRC
  */
-gulp.task('jshint', function () {
+gulp.task('lint', function () {
 	return gulp.src([
 		SRC + '/assets/elements/**/*.js',
 		SRC + '/assets/elements/**/*.html',
 	])
-	.pipe(reload({stream: true, once: true}))
-	.pipe($.jshint.extract()) // Extract JS from .html files
-	.pipe($.jshint())
-	.pipe($.jshint.reporter('jshint-stylish'))
-	.pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
+	.pipe($.eslint({
+		"plugins": [ "html" ],
+		"parser": "babel-eslint"
+	}))
+	.pipe($.eslint.format())
+    .pipe($.eslint.failAfterError());
 });
+
 /**
- * Lint JavaScript fom SRC (this won't fail, so it's good for the dev environment)
+ * Lint JavaScript fom SRC (don't fail on error)
  */
-gulp.task('soft-jshint', function () {
+gulp.task('soft-lint', function () {
 	return gulp.src([
 		SRC + '/assets/elements/**/*.js',
 		SRC + '/assets/elements/**/*.html',
 	])
-	.pipe($.jshint.extract()) // Extract JS from .html files
-	.pipe($.jshint())
-	.pipe($.jshint.reporter('jshint-stylish'))
+	.pipe($.eslint({
+		"plugins": [ "html" ],
+		"parser": "babel-eslint"
+	}))
+	.pipe($.eslint.format())
 });
 
 /**
@@ -93,16 +97,52 @@ gulp.task('jekyll', function (gulpCallBack){
 	});
 });
 
+/**
+ * Transpile JS
+ */
+
 gulp.task('js', function() {
   return gulp.src([DEST_DEV + '/**/*.{js,html}', '!'+DEST_DEV+'/assets/bower_components/**/*'])
+
 	// Extract JS from .html files
 	.pipe($.if('*.html', $.crisper({scriptInHead:false})))
 	.pipe($.sourcemaps.init())
 	.pipe($.if('*.js', $.babel({
-		presets: ['es2015']
+		presets: ['es2015'],
+		plugins: ["transform-object-rest-spread"]
 	})))
 	.pipe($.sourcemaps.write())
-	.pipe(gulp.dest('.tmp/'))
+	.pipe(gulp.dest(DEST_DEV));
+});
+
+/**
+ * Transpile JS (don't fail on errors)
+ */
+
+gulp.task('soft-js', function() {
+  return gulp.src([DEST_DEV + '/**/*.{js,html}', '!'+DEST_DEV+'/assets/bower_components/**/*'])
+
+	.pipe($.plumber({
+		errorHandler: function(error) {
+			$.util.log(
+				$.util.colors.cyan('Plumber') + $.util.colors.red(' found unhandled error:\n'),
+				error.toString()
+			);
+			this.emit('end');
+		}
+	}))
+
+	// Extract JS from .html files
+	.pipe($.if('*.html', $.crisper({scriptInHead:false})))
+	.pipe($.sourcemaps.init())
+	.pipe($.if('*.js', $.babel({
+		presets: ['es2015'],
+		plugins: ["transform-object-rest-spread"]
+	})))
+	.pipe($.sourcemaps.write())
+
+	.pipe($.plumber.stop())
+
 	.pipe(gulp.dest(DEST_DEV));
 });
 
@@ -181,20 +221,6 @@ gulp.task('polymer-revision', function () {
 		.pipe($.size({title: 'revision'}));
 });
 
-
-/**
- * Babelify
- */
-gulp.task('babel', function () {
-	var app = gulp.src([ DEST_DEV + '/assets/elements/elements.build.js'])
-	.pipe($.babel({
-		presets: ['es2015']
-	}))
-	.pipe(gulp.dest(DEST_DEV));
-
-	return merge(app)
-	.pipe($.size({title: 'babel'}));
-});
 /**
  * Clones the content from DEST_POLYMER to DEST_GZIP
  */
@@ -330,15 +356,15 @@ gulp.task('clean:gzip', del.bind(null, [DEST_GZIP]));
 /* Builders ----------------------------------------------------------------- */
 gulp.task('build:dev', ['clean:dev'], function (cb) {
 	runSequence(
-		'soft-jshint',
+		'soft-lint',
 		'jekyll',
-		'js',
+		'soft-js',
 
 	cb);
 });
 gulp.task('build:polymer', ['clean:polymer'], function (cb) {
 	runSequence(
-		'jshint',
+		'lint',
 		'jekyll',
 		'js',
 		'polymer-copy',

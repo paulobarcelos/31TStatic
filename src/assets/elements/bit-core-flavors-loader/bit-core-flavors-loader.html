@@ -1,38 +1,42 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
-<link rel="import" href="../bit-core-redux/bit-core-redux-dispatcher.html">
-<link rel="import" href="../bit-core-reducers/action-types.html">
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
 
 <dom-module id='bit-core-flavors-loader'>
 	<template>
 		<iron-ajax
-			url="[[apiUrl]]flavors"
+			url="[[apiEndpoint]]/flavors"
 			id="loader"
 			last-response="{{response}}">
 		</iron-ajax>
-		<bit-core-redux-dispatcher
-			id="reduxDispatcher">
-		</bit-core-redux-dispatcher>
 	</template>
 </dom-module>
 
 <script>
 (function () {
 
+	const { setFlavors } = window.BIT.Redux.actions.flavors
+	const { HasState } = window.BIT.Behaviors
+
 	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
 		beforeRegister() {
-			this.is = 'bit-core-flavors-loader';
+			this.is = 'bit-core-flavors-loader'
 			this.hostAttributes = {
 				hidden: true
-			};
+			}
 			this.properties = {
-				apiUrl:{
-					type: String
+				apiEndpoint:{
+					type: String,
+					observer: 'fetchData'
 				},
 				updatedAt:{
-					type: Number,
-					observer: '_updatedAtChanged'
+					type: Number
 				},
 				cacheExpiration: {
 					type: Number,
@@ -42,24 +46,27 @@
 					type: Object,
 					observer: '_responseChanged'
 				}
-			};
+			}
 		}
 
-		_updatedAtChanged(updatedAt){
-			if(Date.now() - updatedAt < this.cacheExpiration){
-				return;
+		fetchData(){
+			if(!this.apiEndpoint){
+				return
 			}
-			this.$.loader.generateRequest();
+			if(Date.now() - this.updatedAt < this.cacheExpiration){
+				return
+			}
+			this.$.loader.generateRequest()
 		}
 
 		_responseChanged(response){
-			this.$.reduxDispatcher.dispatch(
-				window.BIT.ActionTypes.SET_FLAVORS,
-				{
-					flavors: response,
-					updatedAt: Date.now()
-				}
-			);
+			setFlavors(response)
+		}
+
+		_stateChanged(state){
+			this.updatedAt = state.flavors.updatedAt
+			this.apiEndpoint = state.endpoints.api
+
 		}
 	}
 	Polymer(Class);

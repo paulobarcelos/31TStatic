@@ -1,0 +1,34 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const { SET_API_ENDPOINT,
+			SET_HOME_ENDPOINT,
+			SET_ROOT_ENDPOINT
+			} = window.BIT.Redux.constants.actionTypes
+	const { dispatch, getState } = window.BIT.Redux.store.store
+
+	EXPORT.setApiEndpoint = function(endpoint){
+		dispatch({
+			type: SET_API_ENDPOINT,
+			payload: endpoint
+		})
+	}
+
+	EXPORT.setHomeEndpoint = function(endpoint){
+		dispatch({
+			type: SET_HOME_ENDPOINT,
+			payload: endpoint
+		})
+	}
+
+	EXPORT.setRootEndpoint = function(endpoint){
+		dispatch({
+			type: SET_ROOT_ENDPOINT,
+			payload: endpoint
+		})
+	}
+
+	window.BIT.Redux.actions.endpoints = EXPORT
+})();
+</script>

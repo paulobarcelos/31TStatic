@@ -1,0 +1,39 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+
+<dom-module id='bit-ui-single-flavor'>
+	<style>
+		:host{
+			//display: inline;
+		}
+	</style>
+	<template>
+		<iron-image
+			src="[[assetsUrl]]images/flavors/low/[[flavor.label]].png">
+		</iron-image>
+	</template>
+</dom-module>
+
+<script>
+(function () {
+	'use strict';
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-single-flavor';
+			this.hostAttributes = {
+
+			};
+			this.properties = {
+				flavor: {
+					type: Object
+				},
+				assetsUrl:{
+					type: String
+				}
+			};
+		}
+	}
+	Polymer(Class);
+})();
+</script>

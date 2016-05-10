@@ -1,0 +1,29 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../bit-redux/index.html">
+<script>
+(() => {
+	const { store } = window.BIT.Redux.store
+
+	const EXPORT = {
+		properties: {
+			state: {
+				type: Object,
+				readOnly: true,
+				observer: '_stateChanged'
+			}
+		},
+		ready(){
+			this._unsubscribeStore = store.subscribe(() => this._setState(store.getState()))
+			this._setState(store.getState())
+		},
+		detached(){
+			this._unsubscribeStore()
+		},
+		_stateChanged(){/* "virtual" */}
+	}
+
+	window.BIT = window.BIT || {}
+	window.BIT.Behaviors = window.Behaviors || {}
+	window.BIT.Behaviors.HasState = EXPORT
+})()
+</script>

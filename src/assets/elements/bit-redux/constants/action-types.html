@@ -1,0 +1,14 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {};
+
+	EXPORT.HYDRATE_STATE = Symbol('HYDRATE_STATE')
+	EXPORT.SET_FLAVORS = Symbol('SET_FLAVORS')
+	EXPORT.SET_API_ENDPOINT = Symbol('SET_API_ENDPOINT')
+	EXPORT.SET_HOME_ENDPOINT = Symbol('SET_HOME_ENDPOINT')
+	EXPORT.SET_ROOT_ENDPOINT = Symbol('SET_ROOT_ENDPOINT')
+
+	window.BIT.Redux.constants.actionTypes = EXPORT
+})()
+</script>

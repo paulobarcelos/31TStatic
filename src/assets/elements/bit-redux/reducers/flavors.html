@@ -1,0 +1,30 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const { SET_FLAVORS } = window.BIT.Redux.constants.actionTypes
+
+	EXPORT.flavors = (
+		state = {
+			map: {},
+			list: [],
+			updatedAt: 0
+		},
+		action = {}) => {
+		switch (action.type) {
+			case SET_FLAVORS:
+				let map = {};
+				action.payload.flavors.forEach((flavor) => map[flavor._id] = flavor);
+				return {
+					map,
+					list: action.payload.flavors.map(flavor => flavor._id),
+					updatedAt: action.payload.updatedAt
+				}
+			default:
+				return state
+		}
+	};
+
+	window.BIT.Redux.reducers.flavors = EXPORT
+})()
+</script>

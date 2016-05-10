@@ -1,0 +1,52 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const { combineReducers, createStore } = window.Redux
+	const { HYDRATE_STATE } = window.BIT.Redux.constants.actionTypes
+
+	const registeredReducers = {}
+
+	const makeHydratable = (reducer, hydrateActionType) => {
+		return function (state, action) {
+			console.log('ACTION', action)
+			switch (action.type) {
+				case hydrateActionType:
+					return reducer(action.payload, action);
+				default:
+					return reducer(state, action);
+			}
+		}
+	}
+
+	const refreshReducer = () => {
+		let reducers = {};
+		Object.keys(registeredReducers).forEach(uuid => {
+
+			reducers = {
+				...reducers,
+				...registeredReducers[uuid]
+			}
+		});
+		const reducer = combineReducers(reducers)
+		const hydratableReducer = makeHydratable(reducer, HYDRATE_STATE)
+		EXPORT.store.replaceReducer(hydratableReducer)
+	}
+
+
+	EXPORT.store = window.Redux.createStore(makeHydratable((state = {}) => state, HYDRATE_STATE))
+	EXPORT.addReducers = (reducers, uuid) => {
+		registeredReducers[uuid] = reducers
+		refreshReducer();
+	}
+	EXPORT.removeReducers = (uuid) => {
+		delete registeredReducers[uuid]
+		refreshReducer();
+	}
+
+	EXPORT.store.subscribe(()=> console.log('STATE', EXPORT.store.getState()))
+
+	window.BIT.Redux.store = EXPORT
+
+})();
+</script>
