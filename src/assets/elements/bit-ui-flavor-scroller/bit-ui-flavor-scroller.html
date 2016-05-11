@@ -19,7 +19,7 @@
 				is="dom-repeat"
 				items="[[flavors]]">
 				<bit-ui-single-flavor
-					assets-url="[[assetsUrl]]"
+					on-tap="_flavorTapped"
 					flavor="[[item]]">
 				</bit-ui-single-flavor>
 			</template>
@@ -39,11 +39,12 @@
 			this.properties = {
 				flavors: {
 					type: Array
-				},
-				assetsUrl:{
-					type: String
 				}
 			};
+		}
+
+		_flavorTapped(e){
+			this.fire('flavor-tap', e.model.item)
 		}
 	}
 	Polymer(Class);

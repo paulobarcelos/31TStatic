@@ -2,7 +2,9 @@
 <script>
 (() => {
 	const EXPORT = {}
-	const { SET_FLAVORS } = window.BIT.Redux.constants.actionTypes
+	const { SET_FLAVORS,
+	 		USER_ADD_FLAVOR,
+			USER_REMOVE_FLAVOR } = window.BIT.Redux.constants.actionTypes
 	const { dispatch } = window.BIT.Redux.store.store
 
 	EXPORT.setFlavors = (flavors) => {
@@ -12,6 +14,20 @@
 				flavors,
 				updatedAt: Date.now()
 			}
+		})
+	}
+
+	EXPORT.userAddFlavor = (flavorId) => {
+		dispatch({
+			type: USER_ADD_FLAVOR,
+			payload: flavorId
+		})
+	}
+
+	EXPORT.userRemoveFlavor = (flavorId) => {
+		dispatch({
+			type: USER_REMOVE_FLAVOR,
+			payload: flavorId
 		})
 	}
 

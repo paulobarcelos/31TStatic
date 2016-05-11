@@ -1,5 +1,5 @@
 {
-  "name": "31T App",
+  "name": "31t-app",
   "private": true,
   "dependencies": {
     "iron-elements": "1.0.10",
@@ -13,6 +13,7 @@
     "node-uuid": "1.4.7",
     "normalize-less": "*",
     "lesshat": "~3.0.2",
-    "redux": "https://cdnjs.cloudflare.com/ajax/libs/redux/3.5.2/redux.js"
+    "redux": "https://cdnjs.cloudflare.com/ajax/libs/redux/3.5.2/redux.js",
+    "bower-reselect": "2.5.2"
   }
 }

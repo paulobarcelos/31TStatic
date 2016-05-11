@@ -10,8 +10,13 @@
 	</style>
 	<template>
 		<iron-image
-			src="[[assetsUrl]]images/flavors/low/[[flavor.label]].png">
+			src="[[flavor.imageUrl.low]]">
 		</iron-image>
+		<template
+			is="dom-if"
+			if="[[flavor.userPicked]]">
+			Selected
+		</template>
 	</template>
 </dom-module>
 
@@ -27,9 +32,6 @@
 			this.properties = {
 				flavor: {
 					type: Object
-				},
-				assetsUrl:{
-					type: String
 				}
 			};
 		}

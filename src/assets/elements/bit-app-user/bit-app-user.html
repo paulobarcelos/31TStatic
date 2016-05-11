@@ -4,7 +4,7 @@
 <link rel="import" href="../bit-core-reducer-adder/bit-core-reducer-adder.html">
 <link rel="import" href="../bit-core-flavors-loader/bit-core-flavors-loader.html">
 
-<link rel="import" href="../bit-ui-flavor-scroller/bit-ui-flavor-scroller.html">
+<link rel="import" href="../bit-container-flavor-picker/bit-container-flavor-picker.html">
 
 <dom-module id='bit-app-user'>
 	<style></style>
@@ -21,10 +21,8 @@
 		<bit-core-flavors-loader>
 		</bit-core-flavors-loader>
 
-		<bit-ui-flavor-scroller
-			flavors="[[state.flavors]]"
-			assets-url="[[rootUrl]]assets/">
-		</bit-ui-flavor-scroller>
+		<bit-container-flavor-picker>
+		</bit-container-flavor-picker>
 
 	</template>
 </dom-module>

@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+<link rel="import" href="../bit-ui-flavor-scroller/bit-ui-flavor-scroller.html">
+
+<dom-module id='bit-container-flavor-picker'>
+	<template>
+		<bit-ui-flavor-scroller
+			on-flavor-tap="_flavorTapped"
+			flavors="[[flavors]]">
+		</bit-ui-flavor-scroller>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	const { HasState } = window.BIT.Behaviors
+	const { flavorListSelector } = window.BIT.Redux.selectors.flavors
+	const { userAddFlavor,
+	 		userRemoveFlavor } = window.BIT.Redux.actions.flavors
+
+	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-container-flavor-picker'
+			this.hostAttributes = {
+
+			}
+			this.properties = {
+				flavors: {
+					type: Array
+				}
+			}
+		}
+
+		_stateChanged(state){
+			this.flavors = flavorListSelector(state)
+		}
+
+		_flavorTapped(e){
+			const flavor = e.detail
+			if(flavor.userPicked){
+				userRemoveFlavor(flavor.id)
+			}
+			else{
+				userAddFlavor(flavor.id)
+			}
+		}
+	}
+	Polymer(Class);
+})();
+</script>
