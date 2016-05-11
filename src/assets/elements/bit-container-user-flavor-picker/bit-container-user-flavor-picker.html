@@ -4,7 +4,7 @@
 <link rel="import" href="../bit-ui-flavor-scrollable-list/bit-ui-flavor-scrollable-list.html">
 <link rel="import" href="../bit-ui-flavor-name-list/bit-ui-flavor-name-list.html">
 
-<dom-module id='bit-container-flavor-picker'>
+<dom-module id='bit-container-user-flavor-picker'>
 	<template>
 		<bit-ui-flavor-scrollable-list
 			on-flavor-tap="_flavorTapped"
@@ -19,11 +19,19 @@
 
 <script>
 (() => {
-	const { HasState } = window.BIT.Behaviors
-	const { flavorListSelector,
-	 		userPickedflavorListSelector} = window.BIT.Redux.selectors.flavors
-	const { userAddFlavor,
-	 		userRemoveFlavor } = window.BIT.Redux.actions.flavors
+	const {
+		HasState
+	} = window.BIT.Behaviors
+
+	const {
+		flavorListSelector,
+	 	userPickedflavorListSelector
+	} = window.BIT.Redux.selectors.flavors
+
+	const {
+		userAddFlavor,
+	 	userRemoveFlavor
+	} = window.BIT.Redux.actions.flavors
 
 	class Class {
 		get behaviors() {
@@ -33,7 +41,7 @@
 		}
 
 		beforeRegister() {
-			this.is = 'bit-container-flavor-picker'
+			this.is = 'bit-container-user-flavor-picker'
 			this.hostAttributes = {
 
 			}

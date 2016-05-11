@@ -10,8 +10,9 @@
 	</style>
 	<template>
 		<iron-image
-			src="[[flavor.imageUrl.low]]">
+			src="[[resolveUrl('../../../')]][[flavor.imageUrl.low]]">
 		</iron-image>
+
 		<template
 			is="dom-if"
 			if="[[flavor.userPicked]]">

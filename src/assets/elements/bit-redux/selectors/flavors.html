@@ -4,14 +4,14 @@
 	const EXPORT = {}
 	const { createSelector } = window.Reselect;
 
-	const formatFlavor = (flavor, root, userPicked) => {
+	const formatFlavor = (flavor, endpoint, userPicked) => {
 		return {
 			...flavor,
 			id: flavor._id,
 			imageUrl : {
-				low: `${root}/assets/images/flavors/low/${flavor.label}.png`,
-				medium: `${root}/assets/images/flavors/medium/${flavor.label}.png`,
-				high: `${root}/assets/images/flavors/high/${flavor.label}.png`,
+				low: `${endpoint}/assets/images/flavors/low/${flavor.label}.png`,
+				medium: `${endpoint}/assets/images/flavors/medium/${flavor.label}.png`,
+				high: `${endpoint}/assets/images/flavors/high/${flavor.label}.png`,
 			},
 			userPicked
 		}
@@ -21,7 +21,7 @@
 	const userPickedFlavorsIdListSelector = state => state.userPickedFlavors
 	const flavorsMapSelector = state => state.flavors.map
 	const flavorsUpdatedAtSelector = state => state.flavors.updatedAt
-	const rootEndpointSelector = state => state.endpoints.root
+	const homeEndpointSelector = state => state.endpoints.home
 
 
 	EXPORT.flavorListSelector = createSelector(
@@ -29,13 +29,13 @@
 			flavorsIdListSelector,
 			userPickedFlavorsIdListSelector,
 			flavorsMapSelector,
-			rootEndpointSelector
+			homeEndpointSelector
 		],
-		(idList, userPickedIdList, map, root) =>
+		(idList, userPickedIdList, map, endpoint) =>
 			idList.map((id) =>
 				formatFlavor(
 					map[id],
-					root,
+					endpoint,
 					userPickedIdList.indexOf(id) !== -1
 				)
 			)

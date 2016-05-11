@@ -1,4 +1,5 @@
 {% include f_site_title %}
+{% include f_base_url %}
 {% include f_external_services %}
 
 <head>
@@ -21,7 +22,7 @@
 		<meta property="og:description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}">
 	{% endif %}
 
-	<meta property="og:image" content="{{r_external_services_root_url}}assets/images/logo/og.png" />
+	<meta property="og:image" content="{{r_external_services_root_url}}/assets/images/logo/og.png" />
 
 	<link rel="apple-touch-icon" sizes="57x57" href="{{r_base_url}}/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="{{r_base_url}}/apple-touch-icon-60x60.png">
@@ -41,7 +42,7 @@
 	<meta name="msapplication-TileImage" content="/{{r_base_url}}mstile-144x144.png">
 	<meta name="theme-color" content="#ffffff">
 
-	<link rel="manifest" href="{{r_external_services_root_url}}manifest.json">
+	<link rel="manifest" href="{{r_external_services_root_url}}/manifest.json">
 
 	<script src="{{r_base_url}}/assets/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 	<script>

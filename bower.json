@@ -11,9 +11,7 @@
     "page": "visionmedia/page.js#4895e378a7080a519390e286a22b02a87a055b10",
     "observe-js": "0.5.7",
     "node-uuid": "1.4.7",
-    "normalize-less": "*",
-    "lesshat": "~3.0.2",
-    "redux": "https://cdnjs.cloudflare.com/ajax/libs/redux/3.5.2/redux.js",
+    "redux": "https://cdnjs.cloudflare.com/ajax/libs/redux/3.5.2/redux.min.js",
     "bower-reselect": "2.5.2"
   }
 }
