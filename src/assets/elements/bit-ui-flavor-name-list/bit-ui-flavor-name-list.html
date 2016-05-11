@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id='bit-ui-flavor-name-list'>
+	<style>
+		:host{
+			display: block;
+		}
+	</style>
+	<template>
+			<template
+				is="dom-repeat"
+				items="[[flavors]]">
+				<div>[[item.name]]</div>
+			</template>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-flavor-name-list';
+			this.hostAttributes = {
+
+			};
+			this.properties = {
+				flavors: {
+					type: Array
+				}
+			};
+		}
+	}
+	Polymer(Class)
+})()
+</script>

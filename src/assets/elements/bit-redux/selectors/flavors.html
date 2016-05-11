@@ -18,7 +18,7 @@
 	}
 
 	const flavorsIdListSelector = state => state.flavors.list
-	const userPickedFlavorsListSelector = state => state.userPickedFlavors
+	const userPickedFlavorsIdListSelector = state => state.userPickedFlavors
 	const flavorsMapSelector = state => state.flavors.map
 	const flavorsUpdatedAtSelector = state => state.flavors.updatedAt
 	const rootEndpointSelector = state => state.endpoints.root
@@ -27,18 +27,25 @@
 	EXPORT.flavorListSelector = createSelector(
 		[
 			flavorsIdListSelector,
-			userPickedFlavorsListSelector,
+			userPickedFlavorsIdListSelector,
 			flavorsMapSelector,
 			rootEndpointSelector
 		],
-		(list, userPickedList, map, root) =>
-			list.map((id) =>
+		(idList, userPickedIdList, map, root) =>
+			idList.map((id) =>
 				formatFlavor(
 					map[id],
 					root,
-					userPickedList.indexOf(id) !== -1
+					userPickedIdList.indexOf(id) !== -1
 				)
 			)
+	)
+
+	EXPORT.userPickedflavorListSelector = createSelector(
+		[
+			EXPORT.flavorListSelector
+		],
+		(flavors) => flavors.filter( flavor => flavor.userPicked )
 	)
 
 	window.BIT.Redux.selectors.flavors = EXPORT
