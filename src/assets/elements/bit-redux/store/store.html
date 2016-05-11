@@ -2,8 +2,15 @@
 <script>
 (() => {
 	const EXPORT = {}
-	const { combineReducers, createStore } = window.Redux
-	const { HYDRATE_STATE } = window.BIT.Redux.constants.actionTypes
+
+	const {
+		combineReducers,
+		createStore
+	} = window.Redux
+
+	const {
+		HYDRATE_STATE
+	} = window.BIT.Redux.constants.actionTypes
 
 	const registeredReducers = {}
 

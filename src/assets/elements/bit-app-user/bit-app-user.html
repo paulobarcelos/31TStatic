@@ -29,11 +29,17 @@
 
 <script>
 (() => {
-	const {	reducers } = window.BIT.Redux
+	const {
+		flavors: flavorReducers,
+		userCombination: userCombinationReducers,
+		endpoints: endpointsReducers
+	} = window.BIT.Redux.reducers
+
 	const {
 		setApiEndpoint,
 		setRootEndpoint,
-		setHomeEndpoint } = window.BIT.Redux.actions.endpoints
+		setHomeEndpoint
+	} = window.BIT.Redux.actions.endpoints
 
 	class Class {
 		beforeRegister() {
@@ -54,8 +60,9 @@
 				reducers:{
 					type: Object,
 					value: {
-						...reducers.flavors,
-						...reducers.endpoints
+						...flavorReducers,
+						...userCombinationReducers,
+						...endpointsReducers
 					}
 				},
 				state:{

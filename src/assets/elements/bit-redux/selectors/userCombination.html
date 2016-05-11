@@ -1,0 +1,25 @@
+<link rel="import" href="../common.html">
+<link rel="import" href="flavors.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	const {
+		createSelector
+	} = window.Reselect;
+
+	const {
+		flavorListSelector
+	} = window.BIT.Redux.selectors.flavors;
+
+
+	EXPORT.userPickedFlavorListSelector = createSelector(
+		[
+			flavorListSelector
+		],
+		(flavors) => flavors.filter( flavor => flavor.userPicked )
+	)
+
+	window.BIT.Redux.selectors.userCombination = EXPORT
+})()
+</script>

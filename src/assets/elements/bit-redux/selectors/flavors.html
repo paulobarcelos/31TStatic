@@ -2,7 +2,9 @@
 <script>
 (() => {
 	const EXPORT = {}
-	const { createSelector } = window.Reselect;
+	const {
+		createSelector
+	} = window.Reselect;
 
 	const formatFlavor = (flavor, endpoint, userPicked) => {
 		return {
@@ -18,7 +20,7 @@
 	}
 
 	const flavorsIdListSelector = state => state.flavors.list
-	const userPickedFlavorsIdListSelector = state => state.userPickedFlavors
+	const userPickedFlavorsIdListSelector = state => state.userCombination.flavors
 	const flavorsMapSelector = state => state.flavors.map
 	const flavorsUpdatedAtSelector = state => state.flavors.updatedAt
 	const homeEndpointSelector = state => state.endpoints.home
@@ -39,13 +41,6 @@
 					userPickedIdList.indexOf(id) !== -1
 				)
 			)
-	)
-
-	EXPORT.userPickedflavorListSelector = createSelector(
-		[
-			EXPORT.flavorListSelector
-		],
-		(flavors) => flavors.filter( flavor => flavor.userPicked )
 	)
 
 	window.BIT.Redux.selectors.flavors = EXPORT

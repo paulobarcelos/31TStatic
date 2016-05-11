@@ -1,0 +1,48 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	const {
+		USER_ADD_FLAVOR,
+		USER_REMOVE_FLAVOR,
+		USER_SET_RATING,
+		USER_SET_COMMENT
+	} = window.BIT.Redux.constants.actionTypes
+
+	const {
+		dispatch
+	} = window.BIT.Redux.store.store
+
+
+	EXPORT.addFlavor = (flavorId) => {
+		dispatch({
+			type: USER_ADD_FLAVOR,
+			payload: flavorId
+		})
+	}
+
+	EXPORT.removeFlavor = (flavorId) => {
+		dispatch({
+			type: USER_REMOVE_FLAVOR,
+			payload: flavorId
+		})
+	}
+
+	EXPORT.setRating = (rating) => {
+		dispatch({
+			type: USER_SET_RATING,
+			payload: rating
+		})
+	}
+
+	EXPORT.setComment = (comment) => {
+		dispatch({
+			type: USER_SET_COMMENT,
+			payload: comment
+		})
+	}
+
+	window.BIT.Redux.actions.userCombination = EXPORT
+})()
+</script>

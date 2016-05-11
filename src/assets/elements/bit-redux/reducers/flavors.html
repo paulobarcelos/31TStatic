@@ -2,9 +2,9 @@
 <script>
 (() => {
 	const EXPORT = {}
-	const { SET_FLAVORS,
-			USER_ADD_FLAVOR,
-		 	USER_REMOVE_FLAVOR } = window.BIT.Redux.constants.actionTypes
+	const {
+		SET_FLAVORS
+	} = window.BIT.Redux.constants.actionTypes
 
 	EXPORT.flavors = (
 		state = {
@@ -22,37 +22,6 @@
 					list: action.payload.flavors.map(flavor => flavor._id),
 					updatedAt: action.payload.updatedAt
 				}
-			default:
-				return state
-		}
-	}
-
-	EXPORT.userPickedFlavors = (
-		state = [],
-		action = {}) => {
-
-		let index;
-		switch (action.type) {
-			case USER_ADD_FLAVOR:
-				if(state.length >= 3){
-					return state
-				}
-				index = state.indexOf(action.payload)
-				if(index !== -1){
-					return state
-				}
-				return [...state, action.payload]
-			case USER_REMOVE_FLAVOR:
-				if(state.length <= 0){
-					return state
-				}
-				index = state.indexOf(action.payload)
-				if(index === -1){
-					return state
-				}
-				const copy = state.slice()
-				copy.splice(index, 1)
-				return copy
 			default:
 				return state
 		}

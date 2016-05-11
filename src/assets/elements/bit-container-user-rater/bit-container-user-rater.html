@@ -1,19 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
-<link rel="import" href="../bit-ui-flavor-scrollable-list/bit-ui-flavor-scrollable-list.html">
-<link rel="import" href="../bit-ui-flavor-name-list/bit-ui-flavor-name-list.html">
 
-<dom-module id='bit-container-user-flavor-picker'>
+<dom-module id='bit-container-user-rater'>
 	<template>
-		<bit-ui-flavor-scrollable-list
-			on-flavor-tap="_flavorTapped"
-			flavors="[[flavors]]">
-		</bit-ui-flavor-scrollable-list>
-
-		<bit-ui-flavor-name-list
-			flavors="[[userPickedFlavors]]">
-		</bit-ui-flavor-name-list>
+		
 	</template>
 </dom-module>
 
@@ -24,17 +15,14 @@
 	} = window.BIT.Behaviors
 
 	const {
-		flavorListSelector
+		flavorListSelector,
+	 	userPickedflavorListSelector
 	} = window.BIT.Redux.selectors.flavors
 
 	const {
-		userPickedFlavorListSelector
-	} = window.BIT.Redux.selectors.userCombination
-
-	const {
-		addFlavor,
-		removeFlavor
-	} = window.BIT.Redux.actions.userCombination
+		userAddFlavor,
+	 	userRemoveFlavor
+	} = window.BIT.Redux.actions.flavors
 
 	class Class {
 		get behaviors() {
@@ -60,16 +48,16 @@
 
 		_stateChanged(state){
 			this.flavors = flavorListSelector(state)
-			this.userPickedFlavors = userPickedFlavorListSelector(state)
+			this.userPickedFlavors = userPickedflavorListSelector(state)
 		}
 
 		_flavorTapped(e){
 			const flavor = e.detail
 			if(flavor.userPicked){
-				removeFlavor(flavor.id)
+				userRemoveFlavor(flavor.id)
 			}
 			else{
-				addFlavor(flavor.id)
+				userAddFlavor(flavor.id)
 			}
 		}
 	}
