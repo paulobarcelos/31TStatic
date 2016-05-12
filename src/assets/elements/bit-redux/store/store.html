@@ -1,11 +1,19 @@
 <link rel="import" href="../common.html">
+
 <script>
 (() => {
 	const EXPORT = {}
 
 	const {
+		default : thunkMiddleware
+	} = window.ReduxThunk
+
+	const createLogger = window.reduxLogger
+
+	const {
 		combineReducers,
-		createStore
+		createStore,
+		applyMiddleware
 	} = window.Redux
 
 	const {
@@ -16,7 +24,6 @@
 
 	const makeHydratable = (reducer, hydrateActionType) => {
 		return function (state, action) {
-			console.log('ACTION', action)
 			switch (action.type) {
 				case hydrateActionType:
 					return reducer(action.payload, action);
@@ -40,8 +47,24 @@
 		EXPORT.store.replaceReducer(hydratableReducer)
 	}
 
+	const loggerMiddleware = createLogger({
+		timestamp:false,
+		duration:true
+	})
 
-	EXPORT.store = window.Redux.createStore(makeHydratable((state = {}) => state, HYDRATE_STATE))
+
+	EXPORT.store = createStore(
+		makeHydratable((state = {}) => state, HYDRATE_STATE),
+		window._ENV !== 'production' ?
+			applyMiddleware(
+				thunkMiddleware,
+				loggerMiddleware
+			)
+			:
+			applyMiddleware(
+				thunkMiddleware
+			)
+	)
 	EXPORT.addReducers = (reducers, uuid) => {
 		registeredReducers[uuid] = reducers
 		refreshReducer();
@@ -50,8 +73,6 @@
 		delete registeredReducers[uuid]
 		refreshReducer();
 	}
-
-	EXPORT.store.subscribe(()=> console.log('STATE', EXPORT.store.getState()))
 
 	window.BIT.Redux.store = EXPORT
 

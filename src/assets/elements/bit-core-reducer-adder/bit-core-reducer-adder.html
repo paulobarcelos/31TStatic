@@ -1,36 +1,41 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../bit-redux/index.html">
 
-
 <script>
 (() => {
-	const { addReducers } = window.BIT.Redux.store
+	const {
+		addReducers,
+		removeReducers
+	} = window.BIT.Redux.store
 
 	let UUID = 0;
 
 	class Class {
 		beforeRegister() {
-			this.is = 'bit-core-reducer-adder';
+			this.is = 'bit-core-reducer-adder'
 			this.hostAttributes = {
 				hidden: true
-			};
+			}
 			this.properties = {
 				reducers:{
 					type: Object,
 					observer: '_reducersChanged'
 				}
-			};
+			}
 		}
 
 		ready(){
 			// Give this adder an unique id
-			this._id = UUID++;
+			this._id = UUID++
+		}
+
+		detached(){
+			removeReducers(this._id)
 		}
 
 		_reducersChanged(reducers){
-			addReducers(reducers, this._id);
+			addReducers(reducers, this._id)
 		}
-
 
 	}
 	Polymer(Class);
