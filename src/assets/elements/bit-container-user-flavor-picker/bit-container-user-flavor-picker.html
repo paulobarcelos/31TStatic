@@ -1,8 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+
 <link rel="import" href="../bit-ui-flavor-scrollable-list/bit-ui-flavor-scrollable-list.html">
 <link rel="import" href="../bit-ui-flavor-name-list/bit-ui-flavor-name-list.html">
+<link rel="import" href="../bit-ui-rating/bit-ui-rating.html">
+<link rel="import" href="../bit-ui-comment-input/bit-ui-comment-input.html">
+<link rel="import" href="../bit-ui-button/bit-ui-button.html">
 
 <dom-module id='bit-container-user-flavor-picker'>
 	<template>
@@ -14,6 +18,23 @@
 		<bit-ui-flavor-name-list
 			flavors="[[userPickedFlavors]]">
 		</bit-ui-flavor-name-list>
+
+		<bit-ui-rating
+			rating="[[rating]]"
+			on-rate-tap="_onRateTap">
+		</bit-ui-rating>
+
+		<bit-ui-comment-input
+			comment="[[comment]]"
+			on-comment-input="_onCommentInput">
+		</bit-ui-comment-input>
+
+		<bit-ui-button
+			enabled="[[canSend]]"
+			on-trigger="_onSendTrigger">
+			Send
+		</bit-ui-button>
+
 	</template>
 </dom-module>
 
@@ -28,12 +49,17 @@
 	} = window.BIT.Redux.selectors.flavors
 
 	const {
-		userPickedFlavorListSelector
+		userPickedFlavorListSelector,
+		userRatingSelector,
+		userCommentSelector,
+		userCanSendSelector
 	} = window.BIT.Redux.selectors.userCombination
 
 	const {
 		addFlavor,
-		removeFlavor
+		removeFlavor,
+		setRating,
+		setComment
 	} = window.BIT.Redux.actions.userCombination
 
 	class Class {
@@ -54,6 +80,15 @@
 				},
 				userPickedFlavors: {
 					type: Array
+				},
+				rating: {
+					type: Number
+				},
+				comment: {
+					type: String
+				},
+				canSend: {
+					type: Boolean
 				}
 			}
 		}
@@ -61,6 +96,9 @@
 		_stateChanged(state){
 			this.flavors = flavorListSelector(state)
 			this.userPickedFlavors = userPickedFlavorListSelector(state)
+			this.rating = userRatingSelector(state)
+			this.comment = userCommentSelector(state)
+			this.canSend = userCanSendSelector(state)
 		}
 
 		_flavorTapped(e){
@@ -71,6 +109,18 @@
 			else{
 				addFlavor(flavor.id)
 			}
+		}
+
+		_onRateTap(e) {
+			setRating(e.detail)
+		}
+
+		_onCommentInput(e) {
+			setComment(e.detail)
+		}
+
+		_onSendTrigger(){
+			console.log('trigger')
 		}
 	}
 	Polymer(Class);

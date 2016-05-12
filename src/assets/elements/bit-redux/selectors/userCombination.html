@@ -20,6 +20,33 @@
 		(flavors) => flavors.filter( flavor => flavor.userPicked )
 	)
 
+	EXPORT.userRatingSelector = createSelector(
+		[
+			state => state.userCombination.rating
+		],
+		(n) => {
+			const rating = [];
+			for(let i = 1; i <=5; i++){
+				rating.push({
+					value: i,
+					selected: i <= n
+				})
+			}
+			return rating
+		}
+	)
+
+	EXPORT.userCommentSelector = state => state.userCombination.comment
+
+	EXPORT.userCanSendSelector = createSelector(
+		[
+			state => state.userCombination.flavors.length,
+			state => state.userCombination.rating,
+			state => state.userCombination.comment
+		],
+		(length, rating, comment) => length === 3 && rating !== 0 && comment !== ""
+	)
+
 	window.BIT.Redux.selectors.userCombination = EXPORT
 })()
 </script>

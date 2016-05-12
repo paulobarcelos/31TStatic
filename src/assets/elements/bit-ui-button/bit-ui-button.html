@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id='bit-ui-button'>
+	<style>
+		:host{
+			display: block;
+			background-color: grey;
+		}
+		:host([enabled]){
+			background-color: red;
+		}
+	</style>
+	<template>
+		<div on-tap="_onTap">
+			<content></content>
+		</div>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-button'
+			this.properties = {
+				enabled: {
+					type: Boolean,
+					reflectToAttribute: true
+				}
+			}
+		}
+
+		_onTap(e){
+			if(this.enabled){
+				this.fire('trigger')
+			}
+		}
+	}
+	Polymer(Class)
+})()
+</script>
+

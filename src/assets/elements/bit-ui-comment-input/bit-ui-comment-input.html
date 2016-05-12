@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id='bit-ui-comment-input'>
+	<style>
+		:host{
+			display: block;
+		}
+	</style>
+	<template>
+		<input id="input" value="{{comment::input}}">
+		</input>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-comment-input';
+			this.hostAttributes = {
+
+			};
+			this.properties = {
+				comment: {
+					type: String,
+					observer: '_commentChanged'
+				}
+			};
+		}
+
+		_commentChanged(e){
+			this.fire('comment-input', e)
+		}
+	}
+	Polymer(Class)
+})()
+</script>
+

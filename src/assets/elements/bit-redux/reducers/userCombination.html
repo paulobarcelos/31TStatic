@@ -51,7 +51,7 @@
 		}
 	}
 
-	const comment = (state = 0, action) => {
+	const comment = (state = "", action) => {
 		switch (action.type) {
 			case USER_SET_COMMENT:
 				return action.payload
