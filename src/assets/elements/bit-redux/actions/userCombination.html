@@ -4,59 +4,102 @@
 	const EXPORT = {}
 
 	const {
+		USER_SET_ID,
+		USER_CLEAR_COMBINATION,
 		USER_ADD_FLAVOR,
 		USER_REMOVE_FLAVOR,
 		USER_SET_RATING,
 		USER_SET_COMMENT,
 		USER_SEND_COMBINATION,
+		USER_SEND_COMBINATION_SUCCESS,
+		USER_SEND_COMBINATION_ERROR,
 		USER_SET_SEND_COMBINATION_STATUS
 	} = window.BIT.Redux.constants.actionTypes
+
+	const {
+		userCombinationApiDataSelector
+	} = window.BIT.Redux.selectors.userCombination
+
+	const {
+		endpointApiCombinationsSelector
+	} = window.BIT.Redux.selectors.endpoints
 
 	const {
 		dispatch
 	} = window.BIT.Redux.store.store
 
 
-	EXPORT.addFlavor = (flavorId) => {
-		dispatch({
-			type: USER_ADD_FLAVOR,
-			payload: flavorId
-		})
-	}
+	EXPORT.setUserId = (id) => dispatch({
+		type: USER_SET_ID,
+		payload: id
+	})
 
-	EXPORT.removeFlavor = (flavorId) => {
-		dispatch({
-			type: USER_REMOVE_FLAVOR,
-			payload: flavorId
-		})
-	}
+	EXPORT.clearCombination = () => dispatch({
+		type: USER_CLEAR_COMBINATION
+	})
 
-	EXPORT.setRating = (rating) => {
-		dispatch({
-			type: USER_SET_RATING,
-			payload: rating
-		})
-	}
+	EXPORT.addFlavor = (flavorId) => dispatch({
+		type: USER_ADD_FLAVOR,
+		payload: flavorId
+	})
 
-	EXPORT.setComment = (comment) => {
-		dispatch({
-			type: USER_SET_COMMENT,
-			payload: comment
-		})
-	}
+	EXPORT.removeFlavor = (flavorId) => dispatch({
+		type: USER_REMOVE_FLAVOR,
+		payload: flavorId
+	})
 
-	EXPORT.sendCombination = () => {
-		dispatch({
-			type: USER_SEND_COMBINATION
-		})
-	}
+	EXPORT.setRating = (rating) => dispatch({
+		type: USER_SET_RATING,
+		payload: rating
+	})
 
-	EXPORT.setSendCombinationStatus = (status) => {
-		dispatch({
-			type: USER_SET_SEND_COMBINATION_STATUS,
-			payload: status
-		})
-	}
+	EXPORT.setComment = (comment) => dispatch({
+		type: USER_SET_COMMENT,
+		payload: comment
+	})
+
+	const sendCombinationStart = () => dispatch({
+		type: USER_SEND_COMBINATION
+	})
+
+	const sendCombinationSuccess = () => dispatch({
+		type: USER_SEND_COMBINATION_SUCCESS
+	})
+
+	const sendCombinationError = (error) => dispatch({
+		type: USER_SEND_COMBINATION_ERROR,
+		payload: error
+	})
+
+	EXPORT.sendCombination = () => dispatch(
+		(dispatch, getState) => {
+			sendCombinationStart()
+
+			const state = getState()
+			const apiData = userCombinationApiDataSelector(state)
+			const body = JSON.stringify(apiData)
+			const combinationsEndpoint = endpointApiCombinationsSelector(state)
+
+			return fetch(
+				combinationsEndpoint,
+				{
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					method: 'POST',
+					body
+				}
+			)
+			.then(response => {
+				if(response.ok) return response
+				throw Error(response.statusText)
+			})
+			.then(response => response.json())
+			.then(json => sendCombinationSuccess(json))
+			.catch(error => sendCombinationError(error))
+		}
+	)
 
 	window.BIT.Redux.actions.userCombination = EXPORT
 })()

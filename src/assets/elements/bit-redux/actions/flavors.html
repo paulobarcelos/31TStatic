@@ -11,15 +11,14 @@
 		dispatch
 	} = window.BIT.Redux.store.store
 
-	EXPORT.setFlavors = (flavors) => {
-		dispatch({
-			type: SET_FLAVORS,
-			payload: {
-				flavors,
-				updatedAt: Date.now()
-			}
-		})
-	}
+	EXPORT.setFlavors = (flavors) => dispatch({
+		type: SET_FLAVORS,
+		payload: {
+			flavors,
+			updatedAt: Date.now()
+		}
+	})
+
 	window.BIT.Redux.actions.flavors = EXPORT
 })()
 </script>

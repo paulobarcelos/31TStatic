@@ -1,10 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+
 <link rel="import" href="../bit-core-persistent-store/bit-core-persistent-store.html">
 <link rel="import" href="../bit-core-reducer-adder/bit-core-reducer-adder.html">
 <link rel="import" href="../bit-core-flavors-loader/bit-core-flavors-loader.html">
 
-<link rel="import" href="../bit-container-user-flavor-picker/bit-container-user-flavor-picker.html">
+<link rel="import" href="../bit-container-user-combination-picker/bit-container-user-combination-picker.html">
+<link rel="import" href="../bit-container-user-combination-result/bit-container-user-combination-result.html">
 
 <dom-module id='bit-app-user'>
 	<style></style>
@@ -21,14 +24,25 @@
 		<bit-core-flavors-loader>
 		</bit-core-flavors-loader>
 
-		<bit-container-user-flavor-picker>
-		</bit-container-user-flavor-picker>
+		<template is="dom-if" if="[[!isDisplayingResult]]">
+			<bit-container-user-combination-picker>
+			</bit-container-user-combination-picker>
+		</template>
+
+		<template is="dom-if" if="[[isDisplayingResult]]">
+			<bit-container-user-combination-result>
+			</bit-container-user-combination-result>
+		</template>
 
 	</template>
 </dom-module>
 
 <script>
 (() => {
+	const {
+		HasState
+	} = window.BIT.Behaviors
+
 	const {
 		flavors: flavorReducers,
 		userCombination: userCombinationReducers,
@@ -41,21 +55,35 @@
 		setHomeEndpoint
 	} = window.BIT.Redux.actions.endpoints
 
+	const {
+		clearCombination
+	} = window.BIT.Redux.actions.userCombination
+
+	const {
+		userIsDisplayingResultSelector
+	} = window.BIT.Redux.selectors.userCombination
+
 	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
+
 		beforeRegister() {
 			this.is = 'bit-app-user'
 			this.properties = {
 				apiUrl:{
-					type: String,
-					observer: '_apiUrlChanged'
+					type: String
 				},
 				rootUrl:{
-					type: String,
-					observer: '_rootUrlChanged'
+					type: String
 				},
 				homeUrl:{
-					type: String,
-					observer: '_homeUrlChanged'
+					type: String
+				},
+				isDisplayingResult: {
+					type: Boolean
 				},
 				reducers:{
 					type: Object,
@@ -64,21 +92,23 @@
 						...userCombinationReducers,
 						...endpointsReducers
 					}
-				},
-				state:{
-					type: Object
 				}
 			}
 		}
 
-		_apiUrlChanged(endpoint){
-			this.async(()=>setApiEndpoint(endpoint))
+		ready(){
+			this.async(()=> {
+				setApiEndpoint(this.apiUrl)
+				setRootEndpoint(this.rootUrl)
+				setHomeEndpoint(this.homeUrl)
+			})
 		}
-		_rootUrlChanged(endpoint){
-			this.async(()=>setRootEndpoint(endpoint))
-		}
-		_homeUrlChanged(endpoint){
-			this.async(()=>setHomeEndpoint(endpoint))
+
+		_stateChanged(state){
+			this.isDisplayingResult = userIsDisplayingResultSelector(state)
+			if(this.isDisplayingResult){
+				this.async(()=> clearCombination(), 5000)
+			}
 		}
 	}
 	Polymer(Class);

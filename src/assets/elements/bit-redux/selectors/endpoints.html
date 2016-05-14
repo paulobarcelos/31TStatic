@@ -1,0 +1,12 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	EXPORT.endpointApiFlavorsSelector = state => `${state.endpoints.api}/flavors`
+	EXPORT.endpointApiUsersSelector = state => `${state.endpoints.api}/users`
+	EXPORT.endpointApiCombinationsSelector = state => `${state.endpoints.api}/combinations`
+
+	window.BIT.Redux.selectors.endpoints = EXPORT
+})()
+</script>

@@ -8,32 +8,9 @@
 <link rel="import" href="../bit-ui-comment-input/bit-ui-comment-input.html">
 <link rel="import" href="../bit-ui-button/bit-ui-button.html">
 
-<dom-module id='bit-container-user-flavor-picker'>
+<dom-module id='bit-container-user-combination-result'>
 	<template>
-		<bit-ui-flavor-scrollable-list
-			on-flavor-tap="_flavorTapped"
-			flavors="[[flavors]]">
-		</bit-ui-flavor-scrollable-list>
-
-		<bit-ui-flavor-name-list
-			flavors="[[userPickedFlavors]]">
-		</bit-ui-flavor-name-list>
-
-		<bit-ui-rating
-			rating="[[rating]]"
-			on-rate-tap="_onRateTap">
-		</bit-ui-rating>
-
-		<bit-ui-comment-input
-			comment="[[comment]]"
-			on-comment-input="_onCommentInput">
-		</bit-ui-comment-input>
-
-		<bit-ui-button
-			enabled="[[canSend]]"
-			on-trigger="_onSendTrigger">
-			Send
-		</bit-ui-button>
+		result
 
 	</template>
 </dom-module>
@@ -49,6 +26,7 @@
 	} = window.BIT.Redux.selectors.flavors
 
 	const {
+		userIdSelector,
 		userPickedFlavorListSelector,
 		userRatingSelector,
 		userCommentSelector,
@@ -56,10 +34,12 @@
 	} = window.BIT.Redux.selectors.userCombination
 
 	const {
+		setUserId,
 		addFlavor,
 		removeFlavor,
 		setRating,
-		setComment
+		setComment,
+		sendCombination
 	} = window.BIT.Redux.actions.userCombination
 
 	class Class {
@@ -70,11 +50,14 @@
 		}
 
 		beforeRegister() {
-			this.is = 'bit-container-user-flavor-picker'
+			this.is = 'bit-container-user-combination-result'
 			this.hostAttributes = {
 
 			}
 			this.properties = {
+				userId: {
+					type: String
+				},
 				flavors: {
 					type: Array
 				},
@@ -93,7 +76,19 @@
 			}
 		}
 
+		ready(){
+			// Try to set the user id on a async call, in order that it has a
+			// chance to be hydrated by the stored state
+			this.async(()=> {
+				if(this.userId){
+					return
+				}
+				setUserId(this._generateGuid())
+			})
+		}
+
 		_stateChanged(state){
+			this.userId = userIdSelector(state)
 			this.flavors = flavorListSelector(state)
 			this.userPickedFlavors = userPickedFlavorListSelector(state)
 			this.rating = userRatingSelector(state)
@@ -120,7 +115,12 @@
 		}
 
 		_onSendTrigger(){
-			console.log('trigger')
+			sendCombination()
+		}
+
+		_generateGuid() {
+			const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+			return `${s4()}${s4()}${s4()}${s4()}${s4()}${s4()}${s4()}${s4()}`
 		}
 	}
 	Polymer(Class);

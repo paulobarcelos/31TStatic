@@ -12,8 +12,9 @@
     "observe-js": "0.5.7",
     "node-uuid": "1.4.7",
     "redux": "https://npmcdn.com/redux@3.5.2/dist/redux.min.js",
-    "redux-thunk" : "https://npmcdn.com/redux-thunk@2.1.0/dist/redux-thunk.min.js",
-    "redux-logger" : "https://npmcdn.com/redux-logger@2.6.1/dist/index.min.js",
-    "reselect": "https://npmcdn.com/reselect@2.5.1/dist/reselect.js"
+    "redux-thunk": "https://npmcdn.com/redux-thunk@2.1.0/dist/redux-thunk.min.js",
+    "redux-logger": "https://npmcdn.com/redux-logger@2.6.1/dist/index.min.js",
+    "reselect": "https://npmcdn.com/reselect@2.5.1/dist/reselect.js",
+    "fetch": "1.0.0"
   }
 }

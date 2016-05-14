@@ -13,6 +13,8 @@
 	} = window.BIT.Redux.selectors.flavors;
 
 
+	EXPORT.userIdSelector = state => state.userCombination.userId
+
 	EXPORT.userPickedFlavorListSelector = createSelector(
 		[
 			flavorListSelector
@@ -46,6 +48,23 @@
 		],
 		(length, rating, comment) => length === 3 && rating !== 0 && comment !== ""
 	)
+
+	EXPORT.userCombinationApiDataSelector = createSelector(
+		[
+			state => state.userCombination.userId,
+			state => state.userCombination.flavors,
+			state => state.userCombination.rating,
+			state => state.userCombination.comment
+		],
+		(userId, flavorIds, rating, combination) => {
+			userId,
+			flavorIds
+			rating,
+			combination
+		}
+	)
+
+	EXPORT.userIsDisplayingResultSelector = state => state.userCombination.isDisplayingResult
 
 	window.BIT.Redux.selectors.userCombination = EXPORT
 })()

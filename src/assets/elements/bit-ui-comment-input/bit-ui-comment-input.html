@@ -7,7 +7,7 @@
 		}
 	</style>
 	<template>
-		<input id="input" value="{{comment::input}}">
+		<input id="input" value="{{value::input}}">
 		</input>
 	</template>
 </dom-module>
@@ -21,6 +21,10 @@
 
 			};
 			this.properties = {
+				value: {
+					type: String,
+					observer: '_valueChanged'
+				},
 				comment: {
 					type: String,
 					observer: '_commentChanged'
@@ -28,8 +32,18 @@
 			};
 		}
 
-		_commentChanged(e){
-			this.fire('comment-input', e)
+		_valueChanged(value){
+			if(value === this.comment){
+				return
+			}
+			this.fire('comment-input', value)
+		}
+
+		_commentChanged(comment){
+			if(comment === this.value){
+				return
+			}
+			this.value = comment
 		}
 	}
 	Polymer(Class)
