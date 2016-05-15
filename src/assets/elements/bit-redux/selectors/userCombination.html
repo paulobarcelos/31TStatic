@@ -51,16 +51,15 @@
 
 	EXPORT.userCombinationApiDataSelector = createSelector(
 		[
-			state => state.userCombination.userId,
-			state => state.userCombination.flavors,
-			state => state.userCombination.rating,
-			state => state.userCombination.comment
+			state => state.userCombination
 		],
-		(userId, flavorIds, rating, combination) => {
-			userId,
-			flavorIds
-			rating,
-			combination
+		(combination) => {
+			return {
+				userId: combination.userId,
+				flavorIds: combination.flavors,
+				rating: combination.rating,
+				comment: combination.comment
+			}
 		}
 	)
 

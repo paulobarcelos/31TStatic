@@ -1,13 +1,38 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../bit-styles/bit-styles.html">
+
 <dom-module id='bit-ui-comment-input'>
-	<style>
+	<style include="bit-typography">
 		:host{
 			display: block;
+			position: relative;
+			box-sizing: border-box;
+		}
+		:host #input{
+			-webkit-appearance: none;
+			border-radius: 0;
+			border: none;
+			@apply(--bit-font-user);
+			font-size: 1rem;
+			width: 100%;
+			min-width: 0;
+			text-align: center;
+			padding: 2px 0;
+			box-sizing: border-box;
+		}
+		@media (orientation : landscape){
+			:host #input{
+				font-size: 0.8rem;
+			}
 		}
 	</style>
+
 	<template>
-		<input id="input" value="{{value::input}}">
+		<input
+			id="input"
+			disabled$="[[disabled]]"
+			value="{{value::input}}">
 		</input>
 	</template>
 </dom-module>
@@ -28,6 +53,10 @@
 				comment: {
 					type: String,
 					observer: '_commentChanged'
+				},
+				disabled: {
+					type: Boolean,
+					value: false
 				}
 			};
 		}

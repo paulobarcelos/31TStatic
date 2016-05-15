@@ -4,21 +4,43 @@
 	<style>
 		:host{
 			display: block;
+			text-align: center;
+			height: 25px;
+		}
+		:host > div {
+			display: inline-block;
+			position: relative;
+			width: 35px;
+			height: 25px;
+		}
+		:host > div > div{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 12px;
+			height: 12px;
+			margin-left: -6px;
+			margin-top: -6px;
+			background-color: white;
+			border-radius: 12px;
+		}
+		:host > div[selected] > div{
+			background-color: black;
+		}
+		@media (orientation : landscape){
+			:host{
+				height: 25px;
+				margin-bottom: 10px
+			}
 		}
 	</style>
 	<template>
 			<template
 				is="dom-repeat"
 				items="[[rating]]">
-				<span on-tap="_onRateTap">
-					<template is="dom-if" if="[[item.selected]]">
-						●
-					</template>
-					<template is="dom-if" if="[[!item.selected]]">
-						○
-					</template>
-
-				</span>
+				<div on-tap="_onRateTap" selected$="[[item.selected]]">
+					<div></div>
+				</div>
 			</template>
 	</template>
 </dom-module>

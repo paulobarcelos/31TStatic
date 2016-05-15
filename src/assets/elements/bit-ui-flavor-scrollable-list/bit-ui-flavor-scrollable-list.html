@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="../bit-ui-single-flavor/bit-ui-single-flavor.html">
 
@@ -7,20 +8,33 @@
 		:host{
 			display: block;
 			overflow-x: scroll;
+			-webkit-overflow-scrolling: touch;
+			position: relative;
 		}
-		:host .container{
+		bit-ui-single-flavor{
+			display: inline-block;
+		}
+		:host #container{
+			margin-left: 30px;
+			margin-right: 30px;
 			width: auto;
-			white-space: nowrap
+			white-space: nowrap;
+			position: relative;
 		}
+
+
 	</style>
 	<template>
-		<div class="container">
+
+		<div id="container">
 			<template
 				is="dom-repeat"
 				items="[[flavors]]">
 				<bit-ui-single-flavor
 					on-tap="_flavorTapped"
-					flavor="[[item]]">
+					flavor="[[item]]"
+					resolution="low"
+					canvas-vertical-units=5>
 				</bit-ui-single-flavor>
 			</template>
 		</div>
@@ -28,25 +42,25 @@
 </dom-module>
 
 <script>
-(function () {
-	'use strict';
+(() => {
 	class Class {
 		beforeRegister() {
-			this.is = 'bit-ui-flavor-scrollable-list';
+			this.is = 'bit-ui-flavor-scrollable-list'
 			this.hostAttributes = {
 
-			};
+			}
 			this.properties = {
 				flavors: {
 					type: Array
 				}
-			};
+			}
 		}
 
 		_flavorTapped(e){
 			this.fire('flavor-tap', e.model.item)
 		}
+
 	}
-	Polymer(Class);
-})();
+	Polymer(Class)
+})()
 </script>

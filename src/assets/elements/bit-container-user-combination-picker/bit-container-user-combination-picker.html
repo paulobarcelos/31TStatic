@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
 
@@ -9,6 +10,29 @@
 <link rel="import" href="../bit-ui-button/bit-ui-button.html">
 
 <dom-module id='bit-container-user-combination-picker'>
+	<style include="iron-flex iron-flex-alignment">
+		:host {
+			height: 70%;
+			@apply(--layout-vertical);
+			@apply(--layout-around-justified);
+		}
+		:host .input {
+			@apply(--layout-horizontal);
+			@apply(--layout-center);
+		}
+		:host .input bit-ui-comment-input{
+			@apply(--layout-flex);
+			margin-left: 20px;
+		}
+		:host .input bit-ui-button{
+			margin-right: 20px;
+		}
+		@media (orientation : landscape){
+			:host{
+				height: 70%;
+			}
+		}
+	</style>
 	<template>
 		<bit-ui-flavor-scrollable-list
 			on-flavor-tap="_flavorTapped"
@@ -24,16 +48,18 @@
 			on-rate-tap="_onRateTap">
 		</bit-ui-rating>
 
-		<bit-ui-comment-input
-			comment="[[comment]]"
-			on-comment-input="_onCommentInput">
-		</bit-ui-comment-input>
+		<div class="input">
+			<bit-ui-comment-input
+				comment="[[comment]]"
+				on-comment-input="_onCommentInput">
+			</bit-ui-comment-input>
 
-		<bit-ui-button
-			enabled="[[canSend]]"
-			on-trigger="_onSendTrigger">
-			Send
-		</bit-ui-button>
+			<bit-ui-button
+				enabled="[[canSend]]"
+				on-trigger="_onSendTrigger">
+				Send
+			</bit-ui-button>
+		</div>
 
 	</template>
 </dom-module>

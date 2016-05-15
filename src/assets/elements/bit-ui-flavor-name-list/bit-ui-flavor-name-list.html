@@ -1,9 +1,21 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../bit-styles/bit-styles.html">
+
 <dom-module id='bit-ui-flavor-name-list'>
-	<style>
+	<style include="bit-typography">
 		:host{
+			@apply(--bit-font);
 			display: block;
+			text-align: center;
+			min-height: 75px;
+			font-size: 1.1rem;
+		}
+		@media (orientation : landscape){
+			:host{
+				font-size: 0.8rem;
+				min-height: 50px;
+			}
 		}
 	</style>
 	<template>

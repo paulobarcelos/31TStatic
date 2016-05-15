@@ -1,13 +1,24 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../bit-styles/bit-styles.html">
+
 <dom-module id='bit-ui-button'>
-	<style>
+	<style include="bit-typography">
 		:host{
+			@apply(--bit-font-user);
 			display: block;
-			background-color: grey;
+			font-size: 1rem;
+			padding: 0 25px;
+			opacity: 0.3;
+			box-sizing: border-box;
 		}
 		:host([enabled]){
-			background-color: red;
+			opacity: 1;
+		}
+		@media (orientation : landscape){
+			:host{
+				font-size: 0.8rem;
+			}
 		}
 	</style>
 	<template>

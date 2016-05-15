@@ -1,42 +1,122 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<link rel="import" href="../../bower_components/iron-image/iron-image.html">
-
 <dom-module id='bit-ui-single-flavor'>
 	<style>
 		:host{
-			//display: inline;
+			display: block;
+			position: relative;
+
+		}
+		:host #selected,
+		:host #image {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+
+		}
+		:host #selected {
+			background-color: rgba(255, 255, 255, 0.6);
+		}
+		:host #image {
+			z-index: 1;
 		}
 	</style>
 	<template>
-		<iron-image
-			src="[[resolveUrl('../../../')]][[flavor.imageUrl.low]]">
-		</iron-image>
+		<img
+			id="image"
+			src="[[resolveUrl('../../../')]][[_resolveResolution(flavor.imageUrl, resolution)]]" />
 
-		<template
-			is="dom-if"
-			if="[[flavor.userPicked]]">
-			Selected
-		</template>
+		<div
+			id="selected"
+			hidden$=[[!flavor.userPicked]]>
+		</div>
+
 	</template>
 </dom-module>
 
 <script>
-(function () {
-	'use strict';
+(() => {
+
 	class Class {
 		beforeRegister() {
-			this.is = 'bit-ui-single-flavor';
-			this.hostAttributes = {
-
-			};
+			this.is = 'bit-ui-single-flavor'
 			this.properties = {
 				flavor: {
 					type: Object
+				},
+				resolution: {
+					type: String,
+					value: 'low'
+				},
+				canvasVerticalUnits: {
+					type: Number,
+					value: 0
+				},
+				canvasHorizontalUnits: {
+					type: Number,
+					value: 0
 				}
-			};
+			}
+
+			this.observers = [
+				'_resize(flavor.width, flavor.height, canvasVerticalUnits, canvasHorizontalUnits, resolution)'
+			]
 		}
+
+		_resize(widthUnits, heightUnits, canvasH, canvasW, resolution){
+			let conversion
+			switch (resolution) {
+				case 'high':
+					conversion = 100
+					break;
+				case 'medium':
+					conversion = 50
+					break;
+				case 'low':
+				default:
+					conversion = 15
+					break;
+
+			}
+
+			const imageWidth = widthUnits * conversion
+			const imageHeight = heightUnits * conversion
+			let width = imageWidth
+			let height = imageHeight
+			const margin = 0.5 * conversion
+			const selectedSize = 4.5 * conversion
+
+			if(canvasW > widthUnits){
+				width = canvasW * conversion
+			}
+			if(canvasH > heightUnits){
+				height = canvasH * conversion
+			}
+
+			this.style.width = `${width}px`
+			this.style.height = `${height}px`
+			this.style.marginLeft = `${margin}px`
+			this.style.marginRight = `${margin}px`
+			this.style.marginTop = `${margin}px`
+			this.style.marginBottom = `${margin}px`
+
+			this.$.image.style.width = `${imageWidth}px`
+			this.$.image.style.height = `${imageHeight}px`
+			this.$.image.style.marginLeft = `-${imageWidth*0.5}px`
+			this.$.image.style.marginTop = `-${imageHeight*0.5}px`
+
+			this.$.selected.style.width = `${selectedSize}px`
+			this.$.selected.style.height = `${selectedSize}px`
+			this.$.selected.style.marginLeft = `-${selectedSize*0.5}px`
+			this.$.selected.style.marginTop = `-${selectedSize*0.5}px`
+			this.$.selected.style.borderRadius = `${selectedSize*0.5}px`
+		}
+
+		_resolveResolution(assets, res){
+			return assets[res]
+		}
+
 	}
-	Polymer(Class);
-})();
+	Polymer(Class)
+})()
 </script>
