@@ -13,13 +13,21 @@
 	} = window.BIT.Redux.selectors.flavors;
 
 
+	const userPickedFlavorsIdListSelector = state => state.userCombination.flavors
+	const flavorsMapSelector = state => state.flavors.map
+
 	EXPORT.userIdSelector = state => state.userCombination.userId
 
 	EXPORT.userPickedFlavorListSelector = createSelector(
 		[
-			flavorListSelector
+			flavorListSelector,
+			userPickedFlavorsIdListSelector,
+			flavorsMapSelector
 		],
-		(flavors) => flavors.filter( flavor => flavor.userPicked )
+		(flavors, ids) => ids.map(id => {
+			const foundFlavors = flavors.filter( flavor => flavor.id === id )
+			return foundFlavors[0]
+		})
 	)
 
 	EXPORT.userRatingSelector = createSelector(
