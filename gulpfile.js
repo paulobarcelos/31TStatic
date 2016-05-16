@@ -108,8 +108,8 @@ gulp.task('js', function() {
 	.pipe($.if('*.html', $.crisper({scriptInHead:false})))
 	.pipe($.sourcemaps.init())
 	.pipe($.if('*.js', $.babel({
-		presets: ['es2015'],
-		plugins: ["transform-object-rest-spread"]
+		presets: ['es2015', 'stage-0'],
+		plugins: ['transform-object-rest-spread']
 	})))
 	.pipe($.sourcemaps.write())
 	.pipe(gulp.dest(DEST_DEV));
@@ -136,8 +136,8 @@ gulp.task('soft-js', function() {
 	.pipe($.if('*.html', $.crisper({scriptInHead:false})))
 	.pipe($.sourcemaps.init())
 	.pipe($.if('*.js', $.babel({
-		presets: ['es2015'],
-		plugins: ["transform-object-rest-spread"]
+		presets: ['es2015', 'stage-0'],
+		plugins: ['transform-object-rest-spread']
 	})))
 	.pipe($.sourcemaps.write())
 

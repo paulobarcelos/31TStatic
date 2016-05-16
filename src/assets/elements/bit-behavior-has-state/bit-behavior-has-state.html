@@ -2,7 +2,9 @@
 <link rel="import" href="../bit-redux/index.html">
 <script>
 (() => {
-	const { store } = window.BIT.Redux.store
+	const {
+		store
+	} = window.BIT.Redux.store
 
 	const EXPORT = {
 		properties: {
@@ -19,11 +21,11 @@
 		detached(){
 			this._unsubscribeStore()
 		},
-		_stateChanged(){/* "virtual" */}
+		_stateChanged(state){/* "virtual" */}
 	}
 
 	window.BIT = window.BIT || {}
-	window.BIT.Behaviors = window.Behaviors || {}
+	window.BIT.Behaviors = window.BIT.Behaviors || {}
 	window.BIT.Behaviors.HasState = EXPORT
 })()
 </script>

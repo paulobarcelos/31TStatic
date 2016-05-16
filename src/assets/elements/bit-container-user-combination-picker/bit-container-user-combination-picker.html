@@ -17,14 +17,16 @@
 			width: 100%;
 			top: 0;
 			left: 0;
+			@apply(--layout-horizontal);
 
 		}
 		:host .container{
 			position: relative;
-			height: 100%;
+			width: 100%;
 			@apply(--layout-vertical);
 			@apply(--center-justified);
 			@apply(--layout-center);
+			@apply(--layout-self-center);
 		}
 
 		bit-ui-flavor-scrollable-list{
@@ -69,7 +71,8 @@
 			<bit-ui-comment-input
 				id="commentInput"
 				comment="[[comment]]"
-				on-comment-input="_onCommentInput">
+				on-comment-input="_onCommentInput"
+				on-tap="_cancelEvent">
 			</bit-ui-comment-input>
 
 			<bit-ui-button
@@ -194,8 +197,13 @@
 			sendCombination()
 		}
 
-		_blur(){
+		_blur(e){
 			this.$.commentInput.blur()
+		}
+
+		_cancelEvent(e){
+			e.stopPropagation()
+			e.preventDefault()
 		}
 
 		_generateGuid() {

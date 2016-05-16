@@ -12,6 +12,12 @@
 			width: 100%;
 			top: 0;
 			left: 0;
+			@apply(--layout-horizontal);
+			@apply(--layout-around-justified);
+		}
+		bit-ui-combination{
+			transform: scale(1.2);
+			@apply(--layout-self-center);
 		}
 
 	</style>
@@ -19,7 +25,8 @@
 
 		<bit-ui-combination
 			flavors="[[userPickedFlavors]]"
-			rating="[[rating]]">
+			rating="[[rating]]"
+			resolution="low">
 		</bit-ui-combination>
 
 	</template>
@@ -51,7 +58,7 @@
 					type: Array
 				},
 				rating: {
-					type: Number
+					type: Array
 				}
 			}
 
