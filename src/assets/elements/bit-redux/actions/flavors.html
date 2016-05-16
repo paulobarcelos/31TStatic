@@ -15,7 +15,7 @@
 		type: SET_FLAVORS,
 		payload: {
 			flavors,
-			updatedAt: Date.now()
+			updatedAt: flavors.length ? Date.now() : 0
 		}
 	})
 
