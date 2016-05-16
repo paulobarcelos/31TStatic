@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/carbon-route/carbon-location.html">
 
 <link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
 
@@ -13,8 +14,13 @@
 	<style></style>
 	<template>
 
+		<carbon-location
+			use-hash-as-path
+			route="{{route}}">
+		</carbon-location>
+
 		<bit-core-persistent-store
-			local-storage-key="bit-app-user">
+			local-storage-key="bit-app-user-[[_event]]">
 		</bit-core-persistent-store>
 
 		<bit-core-reducer-adder
@@ -92,16 +98,38 @@
 						...userCombinationReducers,
 						...endpointsReducers
 					}
+				},
+				route: {
+					type: Object,
+					observer: '_routeChanged'
+
+				},
+				_event: {
+					type: String,
+					value: 'demo'
 				}
 			}
+
+			this.observers = [
+				'_applyEventToApi(apiUrl, _event)'
+			]
 		}
 
 		ready(){
 			this.async(()=> {
-				setApiEndpoint(this.apiUrl)
 				setRootEndpoint(this.rootUrl)
 				setHomeEndpoint(this.homeUrl)
 			})
+		}
+
+		_applyEventToApi(apiUrl, _event){
+			this.debounce('api endpoint', ()=> {
+				setApiEndpoint(this.apiUrl.replace('{{EVENT}}', _event))
+			})
+		}
+
+		_routeChanged(route){
+			this._event = route.path.replace('!', '').replace('/', '')
 		}
 
 		_stateChanged(state){

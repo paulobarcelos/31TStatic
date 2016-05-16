@@ -19,7 +19,7 @@
 	const {
 		setFlavors
 	} = window.BIT.Redux.actions.flavors
-	
+
 	const {
 		HasState
 	} = window.BIT.Behaviors
@@ -54,8 +54,8 @@
 			}
 		}
 
-		fetchData(){
-			if(!this.apiEndpoint){
+		fetchData(apiEndpoint){
+			if(!apiEndpoint){
 				return
 			}
 			if(Date.now() - this.updatedAt < this.cacheExpiration){
@@ -65,6 +65,7 @@
 		}
 
 		_responseChanged(response){
+			response = response || []
 			setFlavors(response)
 		}
 
