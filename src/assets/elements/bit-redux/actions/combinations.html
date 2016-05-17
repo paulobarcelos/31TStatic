@@ -1,0 +1,121 @@
+<link rel="import" href="../common.html">
+
+<script>
+(() => {
+	const EXPORT = {}
+
+	const {
+		SET_COMBINATIONS,
+		ADD_COMBINATIONS,
+		FETCH_COMBINATIONS_START,
+		FETCH_COMBINATIONS_SUCCESS,
+		FETCH_COMBINATIONS_ERROR
+	} = window.BIT.Redux.constants.actionTypes
+
+	const {
+		dispatch
+	} = window.BIT.Redux.store.store
+
+	const {
+		endpointApiCombinationsSelector
+	} = window.BIT.Redux.selectors.endpoints
+
+
+	EXPORT.setCombinations = (combinations) => dispatch({
+		type: SET_COMBINATIONS,
+		payload: {
+			combinations,
+			updatedAt: combinations.length ? Date.now() : 0
+		}
+	})
+
+	EXPORT.addCombinations = (combinations) => dispatch({
+		type: ADD_COMBINATIONS,
+		payload: {
+			combinations,
+			updatedAt: combinations.length ? Date.now() : 0
+		}
+	})
+
+	const fetchCombinationsStart = () => dispatch({
+		type: FETCH_COMBINATIONS_START
+	})
+
+	const fetchCombinationsSuccess = (response) => dispatch({
+		type: FETCH_COMBINATIONS_SUCCESS,
+		payload: response
+	})
+
+	const fetchCombinationsError = (error) => dispatch({
+		type: FETCH_COMBINATIONS_ERROR,
+		payload: error
+	})
+
+	EXPORT.fetchCombinations = (query = {}) => new Promise((resolve, reject) => {
+		dispatch(
+			(dispatch, getState) => {
+				fetchCombinationsStart()
+
+				const state = getState()
+				const combinationsEndpoint = endpointApiCombinationsSelector(state)
+
+				let queryString = '?'
+
+				Object.keys(query).forEach(	key =>
+					queryString += `${key}=${encodeURIComponent(JSON.stringify(query[key]))}&`
+				)
+
+				return fetch(combinationsEndpoint + queryString)
+				.then(response => {
+					if(response.ok) return response
+					throw Error(response.statusText)
+				})
+				.then(response => response.json())
+				.then(json => {
+					fetchCombinationsSuccess(json)
+					resolve(json)
+				})
+				.catch(error => {
+					fetchCombinationsError(error)
+					reject(error)
+				})
+			}
+		)
+	})
+
+	EXPORT.fetchAndSetCombinations = (query = {}) => new Promise((resolve, reject) => {
+		dispatch(
+			(dispatch, getState) => {
+				EXPORT.fetchCombinations(query)
+				.then(json => {
+					EXPORT.setCombinations(json)
+					resolve(json)
+				})
+				.catch(error => {
+					reject(error)
+				})
+			}
+		)
+	})
+
+	EXPORT.fetchAndAddCombinations = (query = {}) => new Promise((resolve, reject) => {
+		dispatch(
+			(dispatch, getState) => {
+				EXPORT.fetchCombinations(query)
+				.then(json => {
+					EXPORT.addCombinations(json)
+					resolve(json)
+				})
+				.catch(error => {
+					reject(error)
+				})
+			}
+		)
+	})
+
+
+
+
+	window.BIT.Redux.actions.combinations = EXPORT
+})()
+</script>

@@ -1,0 +1,144 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/carbon-route/carbon-location.html">
+
+<link rel="import" href="../bit-redux/index.html">
+
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+<link rel="import" href="../bit-core-reducer-adder/bit-core-reducer-adder.html">
+
+
+<dom-module id='bit-app-live-combinations'>
+	<style></style>
+	<template>
+
+		<carbon-location
+			use-hash-as-path
+			route="{{route}}">
+		</carbon-location>
+
+		<bit-core-reducer-adder
+			reducers="[[reducers]]">
+		</bit-core-reducer-adder>
+
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	const {
+		HasState
+	} = window.BIT.Behaviors
+
+	const {
+		combinations: combinationsReducers,
+		endpoints: endpointsReducers,
+		liveCombinations: liveCombinationsReducers
+	} = window.BIT.Redux.reducers
+
+	const {
+		setApiEndpoint,
+		setRootEndpoint,
+		setHomeEndpoint
+	} = window.BIT.Redux.actions.endpoints
+
+	const {
+		fetchRecentCombinations,
+		setCreatedFrom,
+		setTitle
+	} = window.BIT.Redux.actions.liveCombinations
+
+
+	const {
+		liveCombinationsCreatedFromSelector
+	} = window.BIT.Redux.selectors.liveCombinations
+
+
+
+	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-app-live-combinations'
+			this.properties = {
+				apiUrl: {
+					type: String
+				},
+				rootUrl: {
+					type: String
+				},
+				homeUrl: {
+					type: String
+				},
+				reducers: {
+					type: Object,
+					value: {
+						...combinationsReducers,
+						...endpointsReducers,
+						...liveCombinationsReducers
+					}
+				},
+				route: {
+					type: Object,
+					observer: '_routeChanged'
+				},
+				_event: {
+					type: String,
+					value: 'demo'
+				},
+				combinationsCreatedFrom: {
+					type: String
+				}
+			}
+
+			this.observers = [
+				'_applyEventToApi(apiUrl, _event)'
+			]
+		}
+
+		ready(){
+
+			this.async(()=> {
+				setRootEndpoint(this.rootUrl)
+				setHomeEndpoint(this.homeUrl)
+				this._recursivellyFetchCombinations()
+			})
+		}
+
+		_recursivellyFetchCombinations(){
+			fetchRecentCombinations({
+				search: {
+					created: { $gt: this.combinationsCreatedFrom }
+				}
+			})
+			this.debounce('fetchCombinations', this._recursivellyFetchCombinations, 10000)
+		}
+
+		_applyEventToApi(apiUrl, _event){
+			this.debounce('api endpoint', ()=> {
+				setApiEndpoint(this.apiUrl.replace('{{EVENT}}', _event))
+			})
+		}
+
+		_routeChanged(route){
+			const title = route.__queryParams.title || 'Combinations'
+			const createdFrom = route.__queryParams.created || new Date()
+
+			setTitle(title)
+			setCreatedFrom(createdFrom)
+
+			this._event = route.path.replace('!', '').replace('/', '')
+		}
+
+		_stateChanged(state){
+			this.combinationsCreatedFrom = liveCombinationsCreatedFromSelector(state)
+
+		}
+	}
+	Polymer(Class);
+})();
+</script>

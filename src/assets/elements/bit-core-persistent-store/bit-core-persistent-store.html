@@ -5,26 +5,31 @@
 
 <dom-module id='bit-core-persistent-store'>
 	<template>
-			<iron-localstorage
-				name="[[localStorageKey]]"
-				value="{{state}}"
-				on-iron-localstorage-load="_hydrate"
-				on-iron-localstorage-load-empty="_hydrate">
-			</iron-localstorage>
+		<iron-localstorage
+			name="[[localStorageKey]]"
+			value="{{state}}"
+			on-iron-localstorage-load="_hydrate"
+			on-iron-localstorage-load-empty="_hydrate">
+		</iron-localstorage>
 	</template>
 </dom-module>
 
 <script>
 (() => {
-	const { store } = window.BIT.Redux.store
-	const { HYDRATE_STATE } = window.BIT.Redux.constants.actionTypes
+	const {
+		store
+	} = window.BIT.Redux.store
+
+	const {
+		HYDRATE_STATE
+	} = window.BIT.Redux.constants.actionTypes
 
 	class Class {
 		beforeRegister() {
-			this.is = 'bit-core-persistent-store';
+			this.is = 'bit-core-persistent-store'
 			this.hostAttributes = {
 				hidden: true
-			};
+			}
 			this.properties = {
 				localStorageKey:{
 					type: String
@@ -33,7 +38,7 @@
 					type: Object,
 					notify: true
 				}
-			};
+			}
 		}
 
 		ready(){

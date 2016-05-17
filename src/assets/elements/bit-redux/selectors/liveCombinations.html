@@ -1,0 +1,10 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	EXPORT.liveCombinationsCreatedFromSelector = state => state.liveCombinations.createdFrom.toString()
+
+	window.BIT.Redux.selectors.liveCombinations = EXPORT
+})()
+</script>
