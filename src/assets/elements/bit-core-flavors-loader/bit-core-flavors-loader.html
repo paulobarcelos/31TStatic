@@ -1,0 +1,90 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+
+<dom-module id='bit-core-flavors-loader'>
+	<template>
+		<iron-ajax
+			url="[[apiEndpoint]]"
+			id="loader"
+			last-response="{{response}}">
+		</iron-ajax>
+	</template>
+</dom-module>
+
+<script>
+(function () {
+
+	const {
+		setFlavors
+	} = window.BIT.Redux.actions.flavors
+
+	const {
+		flavorsUpdatedAtSelector
+	} = window.BIT.Redux.selectors.flavors
+
+	const {
+		endpointApiFlavorsSelector
+	} = window.BIT.Redux.selectors.endpoints
+
+	const {
+		HasState
+	} = window.BIT.Behaviors
+
+	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
+		beforeRegister() {
+			this.is = 'bit-core-flavors-loader'
+			this.hostAttributes = {
+				hidden: true
+			}
+			this.properties = {
+				apiEndpoint:{
+					type: String,
+					observer: 'fetchData'
+				},
+				updatedAt:{
+					type: Number
+				},
+				cacheExpiration: {
+					type: Number,
+					value: 60 * 60 * 1000
+				},
+				response:{
+					type: Object,
+					observer: '_responseChanged'
+				}
+			}
+		}
+
+		fetchData(apiEndpoint){
+			if(!this.apiEndpoint){
+				return
+			}
+			if(Date.now() - this.updatedAt < this.cacheExpiration){
+				return
+			}
+			this.$.loader.generateRequest()
+		}
+
+
+
+		_responseChanged(response){
+			response = response || []
+			setFlavors(response)
+		}
+
+		_stateChanged(state){
+			this.updatedAt = flavorsUpdatedAtSelector(state)
+			this.apiEndpoint = endpointApiFlavorsSelector(state)
+
+		}
+	}
+	Polymer(Class);
+})();
+</script>

@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<script>
+(() => {
+
+	const EXPORT = {
+		properties: {
+			resolution: {
+				type: String,
+				value: 'low'
+			}
+		},
+
+		_unitsToPixels (units) {
+			switch (this.resolution) {
+				case 'high':
+					return 100 * units
+				case 'medium':
+					return 50 * units
+				case 'low':
+				default:
+					return 20 * units
+			}
+		},
+
+		_resolveAssetsUrl (assets, resolution)  {
+			resolution = resolution || this.resolution
+			return assets[resolution]
+		}
+
+	}
+
+	window.BIT = window.BIT || {}
+	window.BIT.Behaviors = window.BIT.Behaviors || {}
+	window.BIT.Behaviors.HasResolution = EXPORT
+
+})()
+</script>

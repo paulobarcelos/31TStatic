@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+
+<link rel="import" href="../bit-redux/index.html">
+
+<dom-module id='bit-core-persistent-store'>
+	<template>
+		<iron-localstorage
+			name="[[localStorageKey]]"
+			value="{{state}}"
+			on-iron-localstorage-load="_hydrate"
+			on-iron-localstorage-load-empty="_hydrate">
+		</iron-localstorage>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	const {
+		store
+	} = window.BIT.Redux.store
+
+	const {
+		HYDRATE_STATE
+	} = window.BIT.Redux.constants.actionTypes
+
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-core-persistent-store'
+			this.hostAttributes = {
+				hidden: true
+			}
+			this.properties = {
+				localStorageKey:{
+					type: String
+				},
+				state: {
+					type: Object,
+					notify: true
+				}
+			}
+		}
+
+		ready(){
+			this._unsubscribeStore = store.subscribe(this._storeUpdated.bind(this))
+		}
+		detached(){
+			this._unsubscribeStore()
+		}
+		_storeUpdated(){
+			this.state = store.getState()
+		}
+		_hydrate() {
+			store.dispatch({
+				type: HYDRATE_STATE,
+				payload: this.state || {}
+			})
+		}
+	}
+	Polymer(Class);
+})();
+</script>

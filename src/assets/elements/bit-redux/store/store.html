@@ -1,0 +1,79 @@
+<link rel="import" href="../common.html">
+
+<script>
+(() => {
+	const EXPORT = {}
+
+	const {
+		default : thunkMiddleware
+	} = window.ReduxThunk
+
+	const createLogger = window.reduxLogger
+
+	const {
+		combineReducers,
+		createStore,
+		applyMiddleware
+	} = window.Redux
+
+	const {
+		HYDRATE_STATE
+	} = window.BIT.Redux.constants.actionTypes
+
+	const registeredReducers = {}
+
+	const makeHydratable = (reducer, hydrateActionType) => {
+		return function (state, action) {
+			switch (action.type) {
+				case hydrateActionType:
+					return reducer(action.payload, action);
+				default:
+					return reducer(state, action);
+			}
+		}
+	}
+
+	const refreshReducer = () => {
+		let reducers = {};
+		Object.keys(registeredReducers).forEach(uuid => {
+
+			reducers = {
+				...reducers,
+				...registeredReducers[uuid]
+			}
+		});
+		const reducer = combineReducers(reducers)
+		const hydratableReducer = makeHydratable(reducer, HYDRATE_STATE)
+		EXPORT.store.replaceReducer(hydratableReducer)
+	}
+
+	const loggerMiddleware = createLogger({
+		collapsed: true
+	})
+
+
+	EXPORT.store = createStore(
+		makeHydratable((state = {}) => state, HYDRATE_STATE),
+		window._ENV !== 'production' ?
+			applyMiddleware(
+				thunkMiddleware,
+				loggerMiddleware
+			)
+			:
+			applyMiddleware(
+				thunkMiddleware
+			)
+	)
+	EXPORT.addReducers = (reducers, uuid) => {
+		registeredReducers[uuid] = reducers
+		refreshReducer();
+	}
+	EXPORT.removeReducers = (uuid) => {
+		delete registeredReducers[uuid]
+		refreshReducer();
+	}
+
+	window.BIT.Redux.store = EXPORT
+
+})();
+</script>

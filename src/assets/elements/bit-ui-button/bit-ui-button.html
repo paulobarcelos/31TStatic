@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bit-styles/bit-styles.html">
+
+<dom-module id='bit-ui-button'>
+	<style include="bit-typography">
+		:host{
+			@apply(--bit-font);
+			display: block;
+			font-size: 1rem;
+			padding: 0 25px;
+			opacity: 0.3;
+			box-sizing: border-box;
+			text-transform: uppercase;
+		}
+		:host([enabled]){
+			opacity: 1;
+		}
+		@media (max-device-width: 480px) and (orientation : landscape){
+			:host{
+				font-size: 0.8rem;
+			}
+		}
+	</style>
+	<template>
+		<div on-tap="_onTap">
+			<content></content>
+		</div>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-button'
+			this.properties = {
+				enabled: {
+					type: Boolean,
+					reflectToAttribute: true
+				}
+			}
+		}
+
+		_onTap(e){
+			if(this.enabled){
+				this.fire('trigger')
+			}
+		}
+	}
+	Polymer(Class)
+})()
+</script>
+

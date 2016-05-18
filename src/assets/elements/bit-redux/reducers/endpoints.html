@@ -1,0 +1,44 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const { SET_API_ENDPOINT,
+			SET_ROOT_ENDPOINT,
+			SET_HOME_ENDPOINT	} = window.BIT.Redux.constants.actionTypes
+
+	const api = function(state = "", action = {}){
+		switch (action.type) {
+			case SET_API_ENDPOINT:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	const home = function(state = "", action = {}){
+		switch (action.type) {
+			case SET_HOME_ENDPOINT:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	const root = function(state = "", action = {}){
+		switch (action.type) {
+			case SET_ROOT_ENDPOINT:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	EXPORT.endpoints = window.Redux.combineReducers({
+		api,
+		home,
+		root
+	})
+
+	window.BIT.Redux.reducers.endpoints = EXPORT
+})()
+</script>

@@ -1,0 +1,128 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+
+<link rel="import" href="../bit-behavior-has-resolution/bit-behavior-has-resolution.html">
+
+<dom-module id='bit-ui-single-flavor'>
+	<style>
+		:host{
+			display: block;
+			position: relative;
+
+		}
+		:host #selected,
+		:host #image {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+
+		}
+		:host #selected {
+			background-color: #f0f8f1;
+		}
+		:host([disable-user-selection]) #selected {
+			display: none;
+		}
+		:host #image {
+			z-index: 1;
+		}
+	</style>
+	<template>
+		<iron-image
+			id="image"
+			sizing="contain"
+			preload
+			placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkYyN0QyRkQxMkFBMTFFNkJFQzhDNTdBNzc2NkU5MTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkYyN0QyRkUxMkFBMTFFNkJFQzhDNTdBNzc2NkU5MTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2RjI3RDJGQjEyQUExMUU2QkVDOEM1N0E3NzY2RTkxOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2RjI3RDJGQzEyQUExMUU2QkVDOEM1N0E3NzY2RTkxOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoM8JyAAAAJWSURBVHja5JrNK0RRGIffucJEQiiU8rFQjI/FWMqKKNZi4Y+zUNaUYoXtlHyWhUZNoZiQfKfxe8176+BeDffeueccv3pWUzPvM+eee88970kUCgUKKfWgE7SDZtAAakAlSIAX8ABuwBU4A6fgNowfTwQU4eKHQQq0/PE7LsEB2BXJsoq0glHQJ/92GOFCjsA2uIhapBaMg6EQBbyEeHQ2wH0UIv1gBiSpPHkCK+AwLJEKMAlGKJ5kwBp4CyJSBWZBD8WbE7Asd75fi/BtcwF0kB7JgUXw6vWh88PlNK+RBEktc1JbySI8J7pIv3SDqVJFUjFO7FKSlhp/FKkD06R/pqVWX5GJMj4ngiQptXqKtHkNmcZJSc3fRMYiXHZEkYTU/EmEl9y9ZF645kZVZNCw0VBHZVgVGSBzk3JF6gO8FOmQJr68HE2f4L9NlyPv2Kan1ZGhMT1Njnv7Mjwfc6TWApEki1RbIFLtkCVhkWcLPF5Y5N4CkUcWubZA5JpF8haI5FnkzAKRCxbJWiCSZRHuT1yafFm5c4Szb7DIofpitUfF7XzTwjXvqCLcKTo2UOTYfXyoS5Qtw0aFa91Ulyhu+DZ8YJAI13ruJcJZp2KnSPc8Sa3kJ3IHVg0QWZVafUXcIctoLJHxmgJ+7yNrmj7xs1IblSrCjcclKra7dElOavJsiv6LZqgb7tlxuysd45wI3J5WY/yBATW8dcSdoih37wuy9luniI5wqDH+UM3XhHHM6UpeI2I55uQnxTv7vCnO+8nuwbMq+Vw9eJaXtV2WQjp49i7AAPuEoClyueRDAAAAAElFTkSuQmCC"
+			src="[[resolveUrl('../../../')]][[_resolveAssetsUrl(flavor.imageUrl)]]">
+		</iron-image>
+
+		<div
+			id="selected"
+			hidden$=[[!flavor.userPicked]]>
+		</div>
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+
+	const {
+		HasResolution
+	} = window.BIT.Behaviors
+
+
+	class Class {
+
+		get behaviors() {
+			return [
+				HasResolution
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-ui-single-flavor'
+			this.properties = {
+				flavor: {
+					type: Object
+				},
+				canvasVerticalUnits: {
+					type: Number,
+					value: 0
+				},
+				canvasHorizontalUnits: {
+					type: Number,
+					value: 0
+				},
+				disableUserSelection:{
+					type: Boolean,
+					reflectToAttribute: true
+				},
+				disableMargin:{
+					type: Boolean
+				}
+			}
+
+			this.observers = [
+				'_resize(flavor.width, flavor.height, canvasVerticalUnits, canvasHorizontalUnits, resolution)'
+			]
+		}
+
+		_resize(widthUnits, heightUnits, canvasH, canvasW, resolution){
+			const imageWidth = this._unitsToPixels(widthUnits)
+			const imageHeight = this._unitsToPixels(heightUnits)
+			let width = imageWidth
+			let height = imageHeight
+			const margin = this.disableMargin ? 0 :  this._unitsToPixels(0.5)
+			const selectedSize = this._unitsToPixels(4.5)
+
+			if(canvasW > widthUnits){
+				width = this._unitsToPixels(canvasW)
+			}
+			if(canvasH > heightUnits){
+				height = this._unitsToPixels(canvasH)
+			}
+
+			this.style.width = `${width}px`
+			this.style.height = `${height}px`
+			this.style.marginLeft = `${margin}px`
+			this.style.marginRight = `${margin}px`
+			this.style.marginTop = `${margin}px`
+			this.style.marginBottom = `${margin}px`
+
+			this.$.image.style.width = `${imageWidth}px`
+			this.$.image.style.height = `${imageHeight}px`
+			this.$.image.style.marginLeft = `-${imageWidth*0.5}px`
+			this.$.image.style.marginTop = `-${imageHeight*0.5}px`
+
+			this.$.selected.style.width = `${selectedSize}px`
+			this.$.selected.style.height = `${selectedSize}px`
+			this.$.selected.style.marginLeft = `-${selectedSize*0.5}px`
+			this.$.selected.style.marginTop = `-${selectedSize*0.5}px`
+			this.$.selected.style.borderRadius = `${selectedSize*0.5}px`
+		}
+
+	}
+	Polymer(Class)
+})()
+</script>

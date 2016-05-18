@@ -1,0 +1,158 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="../bit-behavior-has-resolution/bit-behavior-has-resolution.html">
+
+<link rel="import" href="../bit-ui-single-flavor/bit-ui-single-flavor.html">
+<link rel="import" href="../bit-ui-rating/bit-ui-rating.html">
+<link rel="import" href="../bit-ui-comment-input/bit-ui-comment-input.html">
+
+<dom-module id='bit-ui-combination-image'>
+	<style>
+		:host{
+			display: block;
+			position: relative;
+		}
+		bit-ui-single-flavor{
+			position: absolute;
+		}
+		:host #container{
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+		}
+
+
+	</style>
+	<template>
+
+		<div id="container">
+			<template
+				is="dom-repeat"
+				items="[[_orderedFlavors]]">
+				<bit-ui-single-flavor
+					id="flavor[[item.id]]"
+					flavor="[[item]]"
+					disable-user-selection
+					disable-margin
+					resolution="[[resolution]]">
+				</bit-ui-single-flavor>
+			</template>
+		</div>
+
+		<!--
+		<bit-ui-rating
+			rating="[[rating]]">
+		</bit-ui-rating>
+
+		<bit-ui-comment-input
+			disabled
+			hidden$="[[!comment]]"
+			comment="[[comment]]">
+		</bit-ui-comment-input>-->
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+
+	const {
+		HasResolution
+	} = window.BIT.Behaviors
+
+	class Class {
+
+		get behaviors() {
+			return [
+				HasResolution
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-ui-combination-image'
+			this.properties = {
+				flavors: {
+					type: Array
+				},
+				_orderedFlavors: {
+					type: Array,
+					computed: '_computeOrderedFlavors(flavors)',
+					observer: '_flavorsChanged'
+				}
+			}
+		}
+
+		_computeOrderedFlavors(flavors){
+			if(!flavors) return []
+			return this.flavors.sort(this._sortBySize)
+		}
+
+		_sortBySize(a, b){
+			if(a.size === b.size){
+				return ((a.width * a.height) > (b.width * b.height)) ? -1 : 1
+			}
+			return (a.size > b.size) ? -1 : 1
+		}
+
+		_flavorsChanged(flavors){
+			// async because they have not been prited to the dom yet
+			this.async(this._resize)
+		}
+
+
+		_resize(){
+			const list = this._orderedFlavors
+
+			if(!list || !list.length){
+				return
+			}
+
+			const x0 = () => list[0].width * -0.5
+			const y0 = () => 0
+
+			const x1 = () => x0() + 1
+			const y1 = () => list[0].height - 1
+
+			const x2 = () => x1() + list[1].width - 1 - list[2].width
+			const y2 = () => y1() + list[1].height + 0.5 - (list[2].height * 0.5)
+
+			const w = list[0].width
+			const h = y2() + list[2].height
+
+			this.style.width = `${this._unitsToPixels(w)}px`
+			this.style.height = `${this._unitsToPixels(h)}px`
+
+			this._orderedFlavors.forEach((flavor, i, list) => {
+				const element = this.$$( `#flavor${flavor.id}` )
+				if(!element){
+					return
+				}
+				let y = 0
+				let x = 0
+
+				switch (i) {
+					case 0:
+						x = x0()
+						y = y0()
+						break;
+					case 1:
+						x = x1()
+						y = y1()
+						break;
+					case 2:
+						x = x2()
+						y = y2()
+						break;
+
+				}
+				element.style.bottom = `${this._unitsToPixels(y)}px`
+				element.style.left = `${this._unitsToPixels(x)}px`
+			})
+
+		}
+
+	}
+	Polymer(Class)
+})()
+</script>

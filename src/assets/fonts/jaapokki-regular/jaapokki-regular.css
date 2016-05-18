@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'jaapokki-regular';
+    src: url('jaapokki-regular-webfont.woff2') format('woff2'),
+        url('jaapokki-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

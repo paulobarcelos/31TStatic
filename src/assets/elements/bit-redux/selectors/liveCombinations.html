@@ -1,0 +1,39 @@
+<link rel="import" href="../common.html">
+<link rel="import" href="combinations.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	const {
+		createSelector
+	} = window.Reselect
+
+	const {
+		formatCombination
+	} = window.BIT.Redux.selectors.combinations
+
+	const flavorsMapSelector = state => state.flavors ? state.flavors.map : {}
+	const combinationsIdListSelector = state => state.combinations ? state.combinations.list : []
+	const combinationsMapSelector = state => state.combinations ? state.combinations.map : {}
+	const homeEndpointSelector = state => state.endpoints ? state.endpoints.home : ''
+
+	EXPORT.liveCombinationsCreatedFromSelector = state => state.liveCombinations.createdFrom.toString()
+	EXPORT.liveCombinationTitleSelector = state => state.liveCombinations.title
+
+
+	EXPORT.liveCombinationsCurrentSelector = createSelector(
+		[
+			combinationsIdListSelector,
+			combinationsMapSelector,
+			flavorsMapSelector,
+			homeEndpointSelector
+		],
+		(list, map, flavorsMap, endpoint) =>
+			list.length ?
+				formatCombination(map[list[0]], endpoint, flavorsMap) :
+				null
+	)
+
+	window.BIT.Redux.selectors.liveCombinations = EXPORT
+})()
+</script>

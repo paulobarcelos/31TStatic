@@ -1,0 +1,76 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+<link rel="import" href="../bit-ui-combination-image/bit-ui-combination-image.html">
+
+<dom-module id='bit-container-user-combination-result'>
+	<style>
+		:host {
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			top: 0;
+			left: 0;
+			@apply(--layout-horizontal);
+			@apply(--layout-around-justified);
+		}
+		bit-ui-combination-image{
+			transform: scale(1.2);
+			@apply(--layout-self-center);
+		}
+
+	</style>
+	<template>
+
+		<bit-ui-combination-image
+			flavors="[[userPickedFlavors]]"
+			rating="[[rating]]"
+			resolution="low">
+		</bit-ui-combination-image>
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	const {
+		HasState
+	} = window.BIT.Behaviors
+
+	const {
+		userPickedFlavorListSelector,
+		userRatingSelector
+	} = window.BIT.Redux.selectors.userCombination
+
+
+	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-container-user-combination-result'
+			this.properties = {
+				userPickedFlavors: {
+					type: Array
+				},
+				rating: {
+					type: Array
+				}
+			}
+
+		}
+
+		_stateChanged(state){
+			this.userPickedFlavors = userPickedFlavorListSelector(state)
+			this.rating = userRatingSelector(state)
+		}
+
+
+	}
+	Polymer(Class);
+})();
+</script>

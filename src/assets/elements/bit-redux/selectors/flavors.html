@@ -1,0 +1,57 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const {
+		createSelector
+	} = window.Reselect;
+
+	EXPORT.formatFlavor = (flavor, endpoint, userPicked) => {
+		return {
+			...flavor,
+			id: flavor._id,
+			imageUrl : {
+				low: `${endpoint}/assets/images/flavors/low/${flavor.label}.png`,
+				medium: `${endpoint}/assets/images/flavors/medium/${flavor.label}.png`,
+				high: `${endpoint}/assets/images/flavors/high/${flavor.label}.png`,
+			},
+			userPicked
+		}
+	}
+
+	EXPORT.flavorsIdListSelector = state =>
+		state.flavors ? state.flavors.list : []
+
+	EXPORT.userPickedFlavorsIdListSelector = state =>
+		state.userCombination ? state.userCombination.flavors : []
+
+	EXPORT.flavorsMapSelector = state =>
+		state.flavors ? state.flavors.map : {}
+
+	EXPORT.flavorsUpdatedAtSelector = state =>
+		state.flavors ? state.flavors.updatedAt : 0
+
+	EXPORT.homeEndpointSelector = state =>
+		state.endpoints ? state.endpoints.home : ''
+
+
+	EXPORT.flavorListSelector = createSelector(
+		[
+			EXPORT.flavorsIdListSelector,
+			EXPORT.userPickedFlavorsIdListSelector,
+			EXPORT.flavorsMapSelector,
+			EXPORT.homeEndpointSelector
+		],
+		(idList, userPickedIdList, map, endpoint) =>
+			idList.map((id) =>
+				EXPORT.formatFlavor(
+					map[id],
+					endpoint,
+					userPickedIdList.indexOf(id) !== -1
+				)
+			)
+	)
+
+	window.BIT.Redux.selectors.flavors = EXPORT
+})()
+</script>

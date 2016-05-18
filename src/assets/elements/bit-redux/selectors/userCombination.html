@@ -1,0 +1,78 @@
+<link rel="import" href="../common.html">
+<link rel="import" href="flavors.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	const {
+		createSelector
+	} = window.Reselect;
+
+	const {
+		flavorListSelector
+	} = window.BIT.Redux.selectors.flavors;
+
+
+	const userPickedFlavorsIdListSelector = state => state.userCombination.flavors
+	const flavorsMapSelector = state => state.flavors.map
+
+	EXPORT.userIdSelector = state => state.userCombination.userId
+
+	EXPORT.userPickedFlavorListSelector = createSelector(
+		[
+			flavorListSelector,
+			userPickedFlavorsIdListSelector,
+			flavorsMapSelector
+		],
+		(flavors, ids) => ids.map(id => {
+			const foundFlavors = flavors.filter( flavor => flavor.id === id )
+			return foundFlavors[0]
+		})
+	)
+
+	EXPORT.userRatingSelector = createSelector(
+		[
+			state => state.userCombination.rating
+		],
+		(n) => {
+			const rating = [];
+			for(let i = 1; i <=5; i++){
+				rating.push({
+					value: i,
+					selected: i <= n
+				})
+			}
+			return rating
+		}
+	)
+
+	EXPORT.userCommentSelector = state => state.userCombination.comment
+
+	EXPORT.userCanSendSelector = createSelector(
+		[
+			state => state.userCombination.flavors.length,
+			state => state.userCombination.rating,
+			state => state.userCombination.comment
+		],
+		(length, rating, comment) => length === 3 && rating !== 0 && comment !== ""
+	)
+
+	EXPORT.userCombinationApiDataSelector = createSelector(
+		[
+			state => state.userCombination
+		],
+		(combination) => {
+			return {
+				userId: combination.userId,
+				flavorIds: combination.flavors,
+				rating: combination.rating,
+				comment: combination.comment
+			}
+		}
+	)
+
+	EXPORT.userIsDisplayingResultSelector = state => state.userCombination.isDisplayingResult
+
+	window.BIT.Redux.selectors.userCombination = EXPORT
+})()
+</script>

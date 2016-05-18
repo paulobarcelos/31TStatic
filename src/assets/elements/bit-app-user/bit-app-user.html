@@ -1,0 +1,144 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/carbon-route/carbon-location.html">
+
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+
+<link rel="import" href="../bit-core-persistent-store/bit-core-persistent-store.html">
+<link rel="import" href="../bit-core-reducer-adder/bit-core-reducer-adder.html">
+<link rel="import" href="../bit-core-flavors-loader/bit-core-flavors-loader.html">
+
+<link rel="import" href="../bit-container-user-combination-picker/bit-container-user-combination-picker.html">
+<link rel="import" href="../bit-container-user-combination-result/bit-container-user-combination-result.html">
+
+<dom-module id='bit-app-user'>
+	<style></style>
+	<template>
+
+		<carbon-location
+			use-hash-as-path
+			route="{{route}}">
+		</carbon-location>
+
+		<bit-core-persistent-store
+			local-storage-key="bit-app-user-[[_event]]">
+		</bit-core-persistent-store>
+
+		<bit-core-reducer-adder
+			reducers="[[reducers]]">
+		</bit-core-reducer-adder>
+
+		<bit-core-flavors-loader>
+		</bit-core-flavors-loader>
+
+		<template is="dom-if" if="[[!isDisplayingResult]]">
+			<bit-container-user-combination-picker>
+			</bit-container-user-combination-picker>
+		</template>
+
+		<template is="dom-if" if="[[isDisplayingResult]]">
+			<bit-container-user-combination-result>
+			</bit-container-user-combination-result>
+		</template>
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	const {
+		HasState
+	} = window.BIT.Behaviors
+
+	const {
+		flavors: flavorReducers,
+		userCombination: userCombinationReducers,
+		endpoints: endpointsReducers
+	} = window.BIT.Redux.reducers
+
+	const {
+		setApiEndpoint,
+		setRootEndpoint,
+		setHomeEndpoint
+	} = window.BIT.Redux.actions.endpoints
+
+	const {
+		clearCombination
+	} = window.BIT.Redux.actions.userCombination
+
+	const {
+		userIsDisplayingResultSelector
+	} = window.BIT.Redux.selectors.userCombination
+
+	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-app-user'
+			this.properties = {
+				apiUrl:{
+					type: String
+				},
+				rootUrl:{
+					type: String
+				},
+				homeUrl:{
+					type: String
+				},
+				isDisplayingResult: {
+					type: Boolean
+				},
+				reducers:{
+					type: Object,
+					value: {
+						...flavorReducers,
+						...userCombinationReducers,
+						...endpointsReducers
+					}
+				},
+				route: {
+					type: Object,
+					observer: '_routeChanged'
+
+				},
+				_event: {
+					type: String,
+					value: 'demo'
+				}
+			}
+
+			this.observers = [
+				'_applyEventToApi(apiUrl, _event)'
+			]
+		}
+
+		ready(){
+			this.async(()=> {
+				setRootEndpoint(this.rootUrl)
+				setHomeEndpoint(this.homeUrl)
+			})
+		}
+
+		_applyEventToApi(apiUrl, _event){
+			this.debounce('api endpoint', ()=> {
+				setApiEndpoint(this.apiUrl.replace('{{EVENT}}', _event))
+			})
+		}
+
+		_routeChanged(route){
+			this._event = route.path.replace('!', '').replace('/', '')
+		}
+
+		_stateChanged(state){
+			this.isDisplayingResult = userIsDisplayingResultSelector(state)
+			if(this.isDisplayingResult){
+				this.async(()=> clearCombination(), 5000)
+			}
+		}
+	}
+	Polymer(Class);
+})();
+</script>

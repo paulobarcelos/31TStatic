@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id='bit-ui-rating'>
+	<style>
+		:host{
+			display: block;
+			text-align: center;
+			font-size: 20px;
+			letter-spacing: 10px;
+		}
+		:host > div {
+			display: inline-block;
+			color: white;
+		}
+		:host > div[selected] {
+			color: black;
+		}
+		/*:host > div {
+			display: inline-block;
+			position: relative;
+			width: 30px;
+			height: 25px;
+		}
+		:host > div > div{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 9px;
+			height: 9px;
+			margin-left: -4.5px;
+			margin-top: -4.5px;
+			background-color: white;
+			border-radius: 9px;
+		}
+		:host > div[selected] > div{
+			background-color: black;
+		}*/
+		@media (max-device-width: 480px) and (orientation : landscape){
+			:host{
+				height: 25px;
+				margin-bottom: 10px
+			}
+		}
+	</style>
+	<template>
+			<template
+				is="dom-repeat"
+				items="[[rating]]">
+				<div on-tap="_onRateTap" selected$="[[item.selected]]">
+					●
+				</div>
+			</template>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-rating';
+			this.hostAttributes = {
+
+			};
+			this.properties = {
+				rating: {
+					type: Array,
+					value: []
+				}
+			};
+		}
+
+		_onRateTap(e){
+			this.fire('rate-tap', e.model.item.value)
+		}
+	}
+	Polymer(Class)
+})()
+</script>
+

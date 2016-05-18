@@ -1,0 +1,233 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="../bit-ui-combination-image/bit-ui-combination-image.html">
+<link rel="import" href="../bit-ui-flavor-name-list/bit-ui-flavor-name-list.html">
+<link rel="import" href="../bit-ui-rating/bit-ui-rating.html">
+<link rel="import" href="../bit-ui-comment-input/bit-ui-comment-input.html">
+
+<dom-module id='bit-ui-combination-featured'>
+	<style>
+		:host{
+			display: block;
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		.vertical-container{
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			@apply(--layout-horizontal);
+			@apply(--layout-center-justified);
+		}
+
+		.vertical-container .inner {
+			width: 100%;
+			@apply(--layout-self-center);
+
+		}
+
+		#imageContainer {
+			text-align: center;
+			height: 55vh;
+			transform-origin: bottom center;
+			@apply(--layout-vertical);
+			@apply(--layout-center);
+			@apply(--layout-end-justified);
+		}
+		bit-ui-combination-image {
+			display: block;
+			animation-name: slide-down;
+			animation-duration: 1s;
+		}
+
+		bit-ui-comment-input {
+			margin-top: 10vh;
+			animation-name: slide-up;
+			animation-duration: 1s;
+			--comment-input-field: {
+				font-size: 4vh;
+				width: auto;
+				min-width: 0;
+				padding: 1vh 6vh;
+			}
+		}
+
+		.name-list-container{
+			position: absolute;
+			left: 50%;
+			top: 0;
+			margin-left: -100vh;
+			height: 100vh;
+			width: 100vh;
+			@apply(--layout-vertical);
+			@apply(--layout-center);
+			@apply(--layout-center-justified);
+		}
+
+		bit-ui-flavor-name-list {
+			font-size: 3.3vh;
+			line-height: 6vh;
+			animation-name: slide-right;
+			animation-duration: 1s;
+		}
+
+		bit-ui-rating {
+			text-align: left;
+			font-size: 6vh;
+			position: absolute;
+			left: 50%;
+			bottom: 28vh;
+			margin-left: 34vh;
+			letter-spacing: 1.7vh;
+			animation-name: slide-left;
+			animation-duration: 1s;
+		}
+
+		@keyframes slide-down {
+			from {
+				opacity: 0;
+				transform: translateY(-50px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes slide-up {
+			0% {
+				opacity: 0;
+				transform: translateY(50px);
+			}
+			100% {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes slide-right {
+			from {
+				opacity: 0;
+				transform: translateX(-50px);
+			}
+			to {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		@keyframes slide-left {
+			from {
+				opacity: 0;
+				transform: translateX(50px);
+			}
+			to {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+	</style>
+	<template>
+
+		<template is="dom-if" if="[[combinationMirror]]">
+			<div class="vertical-container">
+				<div class="inner">
+					<div id="imageContainer">
+						<bit-ui-combination-image
+							id="image"
+							flavors="[[combination.flavors]]"
+							rating="[[combination.rating]]"
+							resolution="medium">
+						</bit-ui-combination-image>
+					</div>
+
+					<bit-ui-comment-input
+						disabled
+						comment="[[combination.comment]]">
+					</bit-ui-comment-input>
+				</div>
+			</div>
+
+			<div class="name-list-container">
+				<bit-ui-flavor-name-list
+					flavors="[[combination.flavors]]">
+				</bit-ui-flavor-name-list>
+			</div>
+
+			<bit-ui-rating
+				rating="[[combination.rating]]">
+			</bit-ui-rating>
+
+
+		</template>
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+
+	const {
+		HasResolution
+	} = window.BIT.Behaviors
+
+	class Class {
+
+		get behaviors() {
+			return [
+				HasResolution
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-ui-combination-featured'
+			this.properties = {
+				combination: {
+					type: Object
+				},
+				combinationMirror: {
+					type: Object,
+					observer: '_combinationMirrorChanged'
+				}
+			}
+			this.observers = [
+				'_computeMirror(combination._id)'
+			]
+		}
+
+		attached(){
+			window.addEventListener('resize', this._onResize.bind(this), true);
+		}
+
+		_combinationMirrorChanged(combinationMirror){
+			if(combinationMirror){
+				this.async(this._onResize)
+			}
+		}
+		_onResize(){
+			const element = this.$$( `#imageContainer` )
+			if(!element){
+				return
+			}
+			const scale = (window.innerHeight) / this._unitsToPixels(40)
+			element.style.transform = `scale(${scale})`;
+
+		}
+
+		_computeMirror(){
+			this.combinationMirror = null;
+			this.async(() => this.combinationMirror = this.combination, 500)
+		}
+
+
+	}
+	Polymer(Class)
+})()
+</script>

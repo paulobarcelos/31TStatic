@@ -1,0 +1,14 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {};
+
+	EXPORT.REQUEST_SENT = Symbol('REQUEST_SENT')
+	EXPORT.REQUEST_SUCCESS = Symbol('REQUEST_SUCCESS')
+	EXPORT.REQUEST_FAIL = Symbol('REQUEST_FAIL')
+	EXPORT.IDDLE = Symbol('IDDLE')
+	EXPORT.HOLD = Symbol('HOLD')
+
+	window.BIT.Redux.constants.statuses = EXPORT
+})()
+</script>

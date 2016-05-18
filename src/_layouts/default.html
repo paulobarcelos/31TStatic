@@ -1,0 +1,12 @@
+{% assign query = (site.pages | where: 'object_id', page.object_id) %}
+<!DOCTYPE html>
+<html>
+	{% include head.html %}
+	<body
+		class="layout_default"
+		app-unresolved>
+		{% include app_shell_default.html %}
+		{{ content }}
+		{% include foot.html %}
+	</body>
+</html>

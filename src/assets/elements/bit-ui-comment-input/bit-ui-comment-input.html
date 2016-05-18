@@ -1,0 +1,114 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bit-styles/bit-styles.html">
+
+<dom-module id='bit-ui-comment-input'>
+	<style include="bit-typography">
+		:host{
+			display: block;
+			position: relative;
+			box-sizing: border-box;
+			@apply(--comment-input);
+		}
+		:host input, :host .disabled-input{
+			-webkit-appearance: none;
+			border-radius: 0;
+			border: none;
+			@apply(--bit-font);
+			font-size: 1rem;
+			width: 100%;
+			min-width: 0;
+			text-align: center;
+			padding: 2px 0;
+			box-sizing: border-box;
+			background-color: #FFFFFF;
+			color: #000;
+			@apply(--comment-input-field);
+		}
+		:host .disabled-input{
+			display: inline-block;
+		}
+
+		:host input:disabled{
+			color: inherit;
+		}
+
+		:host input::-webkit-input-placeholder{
+			text-align: left;
+			color: black;
+			padding: 2px 10px;
+		}
+		@media (max-device-width: 480px) and (orientation : landscape){
+			:host input{
+				font-size: 0.8rem;
+			}
+		}
+	</style>
+
+	<template>
+		<input
+			id="input"
+			placeholder="This is"
+			hidden$="[[disabled]]"
+			disabled$="[[disabled]]"
+			value="{{value::input}}">
+		</input>
+		<template is="dom-if" if="[[disabled]]">
+			<div
+				class="disabled-input">
+				{{comment}}
+			</div>
+		</template>
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-comment-input';
+			this.hostAttributes = {
+
+			};
+			this.properties = {
+				value: {
+					type: String,
+					observer: '_valueChanged'
+				},
+				comment: {
+					type: String,
+					observer: '_commentChanged'
+				},
+				disabled: {
+					type: Boolean,
+					value: false
+				}
+			};
+		}
+
+		focus(){
+			this.$.input.focus()
+		}
+		blur(){
+			this.$.input.blur()
+		}
+		_valueChanged(value){
+			if(value === this.comment){
+				return
+			}
+			this.fire('comment-input', value)
+		}
+
+		_commentChanged(comment){
+			if(comment === this.value){
+				return
+			}
+			this.value = comment
+		}
+
+	}
+	Polymer(Class)
+})()
+</script>
+

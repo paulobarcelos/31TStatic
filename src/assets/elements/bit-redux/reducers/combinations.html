@@ -1,0 +1,94 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const {
+		SET_COMBINATIONS,
+		ADD_COMBINATIONS,
+		REMOVE_COMBINATION
+	} = window.BIT.Redux.constants.actionTypes
+
+	function shallowCopy(oldObj) {
+		var newObj = {};
+		for(var i in oldObj) {
+			if(oldObj.hasOwnProperty(i)) {
+				newObj[i] = oldObj[i];
+			}
+		}
+		return newObj;
+	}
+
+	EXPORT.combinations = (
+		state = {
+			map: {},
+			list: [],
+			updatedAt: 0
+		},
+		action = {}) => {
+
+		const {
+			type,
+			payload
+		} = action
+
+		let map = {}
+		let list = []
+
+		switch (type) {
+
+			case SET_COMBINATIONS:
+				payload.combinations.forEach((item) => map[item._id] = item)
+				return {
+					map,
+					list: payload.combinations.map(item => item._id),
+					updatedAt: payload.updatedAt
+				}
+
+			case ADD_COMBINATIONS:
+				map = shallowCopy(state.map)
+				list = state.list.slice(0)
+
+				payload.combinations.forEach((item) =>{
+					map[item._id] = item
+					if(list.indexOf(item._id) === -1){
+						list.push(item._id)
+					}
+				})
+
+				return {
+					map,
+					list,
+					updatedAt: payload.updatedAt
+				}
+
+			case REMOVE_COMBINATION:
+				map = shallowCopy(state.map)
+				list = state.list.slice()
+				if(list.length <= 0){
+					return {
+						...state
+					}
+				}
+
+				const index = list.indexOf(payload._id)
+				if(index === -1){
+					return {
+						...state
+					}
+				}
+				list.splice(index, 1)
+				delete map[payload._id]
+
+				return {
+					map,
+					list,
+					updatedAt: payload.updatedAt
+				}
+			default:
+				return state
+		}
+	}
+
+	window.BIT.Redux.reducers.combinations = EXPORT
+})()
+</script>

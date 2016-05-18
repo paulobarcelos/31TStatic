@@ -1,0 +1,37 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const {
+		SET_LIVE_COMBINATIONS_CREATED_FROM,
+		SET_LIVE_COMBINATIONS_TITLE
+	} = window.BIT.Redux.constants.actionTypes
+
+
+	const createdFrom = function(state = new Date(0), action){
+		switch (action.type) {
+			case SET_LIVE_COMBINATIONS_CREATED_FROM:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	const title = function(state = 'Combinations', action){
+		switch (action.type) {
+			case SET_LIVE_COMBINATIONS_TITLE:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+
+	EXPORT.liveCombinations = window.Redux.combineReducers({
+		createdFrom,
+		title
+	})
+
+	window.BIT.Redux.reducers.liveCombinations = EXPORT
+})()
+</script>

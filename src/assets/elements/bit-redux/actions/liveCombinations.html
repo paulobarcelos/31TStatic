@@ -1,0 +1,50 @@
+<link rel="import" href="../common.html">
+<link rel="import" href="combinations.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	const {
+		SET_LIVE_COMBINATIONS_CREATED_FROM,
+		SET_LIVE_COMBINATIONS_TITLE
+	} = window.BIT.Redux.constants.actionTypes
+
+	const {
+		fetchAndAddCombinations
+	} = window.BIT.Redux.actions.combinations
+
+	const {
+		dispatch
+	} = window.BIT.Redux.store.store
+
+	EXPORT.setCreatedFrom = (datetime) => dispatch({
+		type: SET_LIVE_COMBINATIONS_CREATED_FROM,
+		payload: datetime
+	})
+
+	EXPORT.setTitle = (datetime) => dispatch({
+		type: SET_LIVE_COMBINATIONS_TITLE,
+		payload: datetime
+	})
+
+	EXPORT.fetchRecentCombinations = (query = {}) => new Promise((resolve, reject) => {
+		dispatch(
+			(dispatch, getState) => {
+				fetchAndAddCombinations(query)
+				.then(combinations => {
+					if(combinations.length){
+						combinations.sort((a,b) => a.created < b.created ? 1 : -1)
+						EXPORT.setCreatedFrom(combinations[0].created)
+					}
+					resolve(combinations)
+				})
+				.catch(error => {
+					reject(error)
+				})
+			}
+		)
+	})
+
+	window.BIT.Redux.actions.liveCombinations = EXPORT
+})()
+</script>

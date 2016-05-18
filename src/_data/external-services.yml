@@ -1,0 +1,12 @@
+production:
+    root: https://app.31t.org
+    api: https://api-31t-{{EVENT}}.herokuapp.com/api
+    ga_code: UX-XXXXXXX-X
+stage:
+    root: https://app-stage.31t.org
+    api: https://api-31t-{{EVENT}}.herokuapp.com/api
+    ga_code: UX-XXXXXXX-X
+development:
+    root: http://localhost:5500
+    api: https://api-31t-{{EVENT}}.herokuapp.com/api
+    ga_code: UX-XXXXXXX-X
