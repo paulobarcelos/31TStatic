@@ -26,24 +26,29 @@
 		},
 		action = {}) => {
 
+		const {
+			type,
+			payload
+		} = action
+
 		let map = {}
 		let list = []
 
-		switch (action.type) {
+		switch (type) {
 
 			case SET_COMBINATIONS:
-				action.payload.combinations.forEach((item) => map[item._id] = item)
+				payload.combinations.forEach((item) => map[item._id] = item)
 				return {
 					map,
-					list: action.payload.combinations.map(item => item._id),
-					updatedAt: action.payload.updatedAt
+					list: payload.combinations.map(item => item._id),
+					updatedAt: payload.updatedAt
 				}
 
 			case ADD_COMBINATIONS:
 				map = shallowCopy(state.map)
 				list = state.list.slice(0)
 
-				action.payload.combinations.forEach((item) =>{
+				payload.combinations.forEach((item) =>{
 					map[item._id] = item
 					if(list.indexOf(item._id) === -1){
 						list.push(item._id)
@@ -53,7 +58,7 @@
 				return {
 					map,
 					list,
-					updatedAt: action.payload.updatedAt
+					updatedAt: payload.updatedAt
 				}
 
 			case REMOVE_COMBINATION:
@@ -65,7 +70,7 @@
 					}
 				}
 
-				const index = list.indexOf(action.payload._id)
+				const index = list.indexOf(payload._id)
 				if(index === -1){
 					return {
 						...state
@@ -77,7 +82,7 @@
 				return {
 					map,
 					list,
-					updatedAt: action.payload.updatedAt
+					updatedAt: payload.updatedAt
 				}
 			default:
 				return state

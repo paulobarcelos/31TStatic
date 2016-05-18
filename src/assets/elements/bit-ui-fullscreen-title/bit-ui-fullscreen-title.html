@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bit-styles/bit-styles.html">
+
+<dom-module id='bit-ui-fullscreen-title'>
+	<style include="bit-typography">
+		:host{
+			@apply(--bit-font);
+			color: #d6d1c8;
+			background-color: black;
+			@apply(--layout-vertical);
+			@apply(--layout-center);
+			@apply(--layout-center-justified);
+			position: absolute;
+			top:0;
+			left:0;
+			width: 100vw;
+			height: 100vh;
+			font-size: 10vh;
+			letter-spacing: 2vh;
+		}
+	</style>
+	<template>
+		<div>[[title]]</div>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-fullscreen-title'
+			this.properties = {
+				title: {
+					type: String
+				}
+			}
+		}
+	}
+	Polymer(Class)
+})()
+</script>

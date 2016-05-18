@@ -7,7 +7,7 @@
 <link rel="import" href="../bit-ui-rating/bit-ui-rating.html">
 <link rel="import" href="../bit-ui-comment-input/bit-ui-comment-input.html">
 
-<dom-module id='bit-ui-combination'>
+<dom-module id='bit-ui-combination-image'>
 	<style>
 		:host{
 			display: block;
@@ -70,7 +70,7 @@
 		}
 
 		beforeRegister() {
-			this.is = 'bit-ui-combination'
+			this.is = 'bit-ui-combination-image'
 			this.properties = {
 				flavors: {
 					type: Array
@@ -84,10 +84,14 @@
 		}
 
 		_computeOrderedFlavors(flavors){
+			if(!flavors) return []
 			return this.flavors.sort(this._sortBySize)
 		}
 
 		_sortBySize(a, b){
+			if(a.size === b.size){
+				return ((a.width * a.height) > (b.width * b.height)) ? -1 : 1
+			}
 			return (a.size > b.size) ? -1 : 1
 		}
 
@@ -99,6 +103,10 @@
 
 		_resize(){
 			const list = this._orderedFlavors
+
+			if(!list || !list.length){
+				return
+			}
 
 			const x0 = () => list[0].width * -0.5
 			const y0 = () => 0

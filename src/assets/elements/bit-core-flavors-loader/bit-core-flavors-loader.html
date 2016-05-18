@@ -6,7 +6,7 @@
 <dom-module id='bit-core-flavors-loader'>
 	<template>
 		<iron-ajax
-			url="[[apiEndpoint]]/flavors"
+			url="[[apiEndpoint]]"
 			id="loader"
 			last-response="{{response}}">
 		</iron-ajax>
@@ -19,6 +19,14 @@
 	const {
 		setFlavors
 	} = window.BIT.Redux.actions.flavors
+
+	const {
+		flavorsUpdatedAtSelector
+	} = window.BIT.Redux.selectors.flavors
+
+	const {
+		endpointApiFlavorsSelector
+	} = window.BIT.Redux.selectors.endpoints
 
 	const {
 		HasState
@@ -55,7 +63,7 @@
 		}
 
 		fetchData(apiEndpoint){
-			if(!apiEndpoint){
+			if(!this.apiEndpoint){
 				return
 			}
 			if(Date.now() - this.updatedAt < this.cacheExpiration){
@@ -64,14 +72,16 @@
 			this.$.loader.generateRequest()
 		}
 
+
+
 		_responseChanged(response){
 			response = response || []
 			setFlavors(response)
 		}
 
 		_stateChanged(state){
-			this.updatedAt = state.flavors.updatedAt
-			this.apiEndpoint = state.endpoints.api
+			this.updatedAt = flavorsUpdatedAtSelector(state)
+			this.apiEndpoint = endpointApiFlavorsSelector(state)
 
 		}
 	}

@@ -5,9 +5,17 @@
 		:host{
 			display: block;
 			text-align: center;
-			height: 25px;
+			font-size: 20px;
+			letter-spacing: 10px;
 		}
 		:host > div {
+			display: inline-block;
+			color: white;
+		}
+		:host > div[selected] {
+			color: black;
+		}
+		/*:host > div {
 			display: inline-block;
 			position: relative;
 			width: 30px;
@@ -21,13 +29,13 @@
 			height: 9px;
 			margin-left: -4.5px;
 			margin-top: -4.5px;
-			background-color: #f0f8f1;
+			background-color: white;
 			border-radius: 9px;
 		}
 		:host > div[selected] > div{
 			background-color: black;
-		}
-		@media (orientation : landscape){
+		}*/
+		@media (max-device-width: 480px) and (orientation : landscape){
 			:host{
 				height: 25px;
 				margin-bottom: 10px
@@ -39,7 +47,7 @@
 				is="dom-repeat"
 				items="[[rating]]">
 				<div on-tap="_onRateTap" selected$="[[item.selected]]">
-					<div></div>
+					●
 				</div>
 			</template>
 	</template>

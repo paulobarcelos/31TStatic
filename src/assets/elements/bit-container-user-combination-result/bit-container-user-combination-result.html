@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
-<link rel="import" href="../bit-ui-combination/bit-ui-combination.html">
+<link rel="import" href="../bit-ui-combination-image/bit-ui-combination-image.html">
 
 <dom-module id='bit-container-user-combination-result'>
 	<style>
@@ -15,7 +15,7 @@
 			@apply(--layout-horizontal);
 			@apply(--layout-around-justified);
 		}
-		bit-ui-combination{
+		bit-ui-combination-image{
 			transform: scale(1.2);
 			@apply(--layout-self-center);
 		}
@@ -23,11 +23,11 @@
 	</style>
 	<template>
 
-		<bit-ui-combination
+		<bit-ui-combination-image
 			flavors="[[userPickedFlavors]]"
 			rating="[[rating]]"
 			resolution="low">
-		</bit-ui-combination>
+		</bit-ui-combination-image>
 
 	</template>
 </dom-module>

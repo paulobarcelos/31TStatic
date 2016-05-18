@@ -3,9 +3,14 @@
 (() => {
 	const EXPORT = {}
 
-	EXPORT.endpointApiFlavorsSelector = state => `${state.endpoints.api}/flavors`
-	EXPORT.endpointApiUsersSelector = state => `${state.endpoints.api}/users`
-	EXPORT.endpointApiCombinationsSelector = state => `${state.endpoints.api}/combinations`
+	EXPORT.endpointApiFlavorsSelector = state =>
+		state.endpoints && state.endpoints.api ? `${state.endpoints.api}/flavors` : ''
+
+	EXPORT.endpointApiUsersSelector = state =>
+		state.endpoints && state.endpoints.api ? `${state.endpoints.api}/users` : ''
+
+	EXPORT.endpointApiCombinationsSelector = state =>
+		state.endpoints && state.endpoints.api ? `${state.endpoints.api}/combinations` : ''
 
 	window.BIT.Redux.selectors.endpoints = EXPORT
 })()

@@ -10,8 +10,9 @@
 			text-align: center;
 			min-height: 80px;
 			font-size: 1.1rem;
+			@apply(--name-list);
 		}
-		@media (orientation : landscape){
+		@media (max-device-width: 480px) and (orientation : landscape){
 			:host{
 				font-size: 0.8rem;
 				min-height: 55px;
@@ -21,7 +22,8 @@
 	<template>
 			<template
 				is="dom-repeat"
-				items="[[flavors]]">
+				items="[[flavors]]"
+				sort="_sortBySize">
 				<div>[[item.name]]</div>
 			</template>
 	</template>
@@ -31,15 +33,18 @@
 (() => {
 	class Class {
 		beforeRegister() {
-			this.is = 'bit-ui-flavor-name-list';
-			this.hostAttributes = {
-
-			};
+			this.is = 'bit-ui-flavor-name-list'
 			this.properties = {
 				flavors: {
 					type: Array
 				}
-			};
+			}
+		}
+		_sortBySize(a, b){
+			if(a.size === b.size){
+				return ((a.width * a.height) > (b.width * b.height)) ? 1 : -1
+			}
+			return (a.size > b.size) ? 1 : -1
 		}
 	}
 	Polymer(Class)

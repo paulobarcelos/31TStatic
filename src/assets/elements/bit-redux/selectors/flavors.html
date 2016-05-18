@@ -6,7 +6,7 @@
 		createSelector
 	} = window.Reselect;
 
-	const formatFlavor = (flavor, endpoint, userPicked) => {
+	EXPORT.formatFlavor = (flavor, endpoint, userPicked) => {
 		return {
 			...flavor,
 			id: flavor._id,
@@ -19,23 +19,32 @@
 		}
 	}
 
-	const flavorsIdListSelector = state => state.flavors.list
-	const userPickedFlavorsIdListSelector = state => state.userCombination.flavors
-	const flavorsMapSelector = state => state.flavors.map
-	const flavorsUpdatedAtSelector = state => state.flavors.updatedAt
-	const homeEndpointSelector = state => state.endpoints.home
+	EXPORT.flavorsIdListSelector = state =>
+		state.flavors ? state.flavors.list : []
+
+	EXPORT.userPickedFlavorsIdListSelector = state =>
+		state.userCombination ? state.userCombination.flavors : []
+
+	EXPORT.flavorsMapSelector = state =>
+		state.flavors ? state.flavors.map : {}
+
+	EXPORT.flavorsUpdatedAtSelector = state =>
+		state.flavors ? state.flavors.updatedAt : 0
+
+	EXPORT.homeEndpointSelector = state =>
+		state.endpoints ? state.endpoints.home : ''
 
 
 	EXPORT.flavorListSelector = createSelector(
 		[
-			flavorsIdListSelector,
-			userPickedFlavorsIdListSelector,
-			flavorsMapSelector,
-			homeEndpointSelector
+			EXPORT.flavorsIdListSelector,
+			EXPORT.userPickedFlavorsIdListSelector,
+			EXPORT.flavorsMapSelector,
+			EXPORT.homeEndpointSelector
 		],
 		(idList, userPickedIdList, map, endpoint) =>
 			idList.map((id) =>
-				formatFlavor(
+				EXPORT.formatFlavor(
 					map[id],
 					endpoint,
 					userPickedIdList.indexOf(id) !== -1
