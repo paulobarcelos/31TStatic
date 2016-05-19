@@ -1,0 +1,17 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	EXPORT.urlVarsTitleSelector = state =>
+		state.urlVars && state.urlVars.title ? state.urlVars.title : ''
+
+	EXPORT.urlVarsQuerySelector = state =>
+		state.urlVars && state.urlVars.query ? state.urlVars.query : {}
+
+	EXPORT.urlVarsEventSelector = state =>
+		state.urlVars && state.urlVars.event ? state.urlVars.event : ''
+
+	window.BIT.Redux.selectors.urlVars = EXPORT
+})()
+</script>

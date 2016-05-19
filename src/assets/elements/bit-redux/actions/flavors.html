@@ -1,15 +1,26 @@
 <link rel="import" href="../common.html">
+
 <script>
 (() => {
 	const EXPORT = {}
 
 	const {
 		SET_FLAVORS,
+		ADD_FLAVORS,
+		REMOVE_FLAVOR,
+		FETCH_FLAVORS_START,
+		FETCH_FLAVORS_SUCCESS,
+		FETCH_FLAVORS_ERROR
 	} = window.BIT.Redux.constants.actionTypes
 
 	const {
 		dispatch
 	} = window.BIT.Redux.store.store
+
+	const {
+		endpointApiFlavorsSelector
+	} = window.BIT.Redux.selectors.endpoints
+
 
 	EXPORT.setFlavors = (flavors) => dispatch({
 		type: SET_FLAVORS,
@@ -18,6 +29,96 @@
 			updatedAt: flavors.length ? Date.now() : 0
 		}
 	})
+
+	EXPORT.addFlavors = (flavors) => dispatch({
+		type: ADD_FLAVORS,
+		payload: {
+			flavors,
+			updatedAt: flavors.length ? Date.now() : 0
+		}
+	})
+
+	EXPORT.removeFlavor = (flavorId) => dispatch({
+		type: REMOVE_FLAVOR,
+		payload: flavorId
+	})
+
+	const fetchFlavorsStart = () => dispatch({
+		type: FETCH_FLAVORS_START
+	})
+
+	const fetchFlavorsSuccess = (response) => dispatch({
+		type: FETCH_FLAVORS_SUCCESS,
+		payload: response
+	})
+
+	const fetchFlavorsError = (error) => dispatch({
+		type: FETCH_FLAVORS_ERROR,
+		payload: error
+	})
+
+	EXPORT.fetchFlavors = (query = {}) => new Promise((resolve, reject) => {
+		dispatch(
+			(dispatch, getState) => {
+				fetchFlavorsStart()
+
+				const state = getState()
+				const flavorsEndpoint = endpointApiFlavorsSelector(state)
+
+				let queryString = '?'
+
+				Object.keys(query).forEach(	key =>
+					queryString += `${key}=${encodeURIComponent(JSON.stringify(query[key]))}&`
+				)
+
+				return fetch(flavorsEndpoint + queryString)
+				.then(response => {
+					if(response.ok) return response
+					throw Error(response.statusText)
+				})
+				.then(response => response.json())
+				.then(json => {
+					fetchFlavorsSuccess(json)
+					resolve(json)
+				})
+				.catch(error => {
+					fetchFlavorsError(error)
+					reject(error)
+				})
+			}
+		)
+	})
+
+	EXPORT.fetchAndSetFlavors = (query = {}) => new Promise((resolve, reject) => {
+		dispatch(
+			(dispatch, getState) => {
+				EXPORT.fetchFlavors(query)
+				.then(json => {
+					EXPORT.setFlavors(json)
+					resolve(json)
+				})
+				.catch(error => {
+					reject(error)
+				})
+			}
+		)
+	})
+
+	EXPORT.fetchAndAddFlavors = (query = {}) => new Promise((resolve, reject) => {
+		dispatch(
+			(dispatch, getState) => {
+				EXPORT.fetchFlavors(query)
+				.then(json => {
+					EXPORT.addFlavors(json)
+					resolve(json)
+				})
+				.catch(error => {
+					reject(error)
+				})
+			}
+		)
+	})
+
 
 	window.BIT.Redux.actions.flavors = EXPORT
 })()

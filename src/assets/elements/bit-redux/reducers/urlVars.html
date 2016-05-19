@@ -1,0 +1,52 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const {
+		SET_URL_VARS_TITLE,
+		SET_URL_VARS_QUERY,
+		SET_URL_VARS_EVENT
+	} = window.BIT.Redux.constants.actionTypes
+
+	const title = (state = '31T', action) => {
+		switch (action.type) {
+			case SET_URL_VARS_TITLE:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	const query = (
+		state = {
+			search:{},
+			sort:{}
+		},
+		action) => {
+
+		switch (action.type) {
+			case SET_URL_VARS_QUERY:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	const event = (state = 'demo', action) => {
+		switch (action.type) {
+			case SET_URL_VARS_EVENT:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	EXPORT.urlVars = window.Redux.combineReducers({
+		title,
+		query,
+		event
+	})
+
+	window.BIT.Redux.reducers.urlVars = EXPORT
+})()
+</script>
