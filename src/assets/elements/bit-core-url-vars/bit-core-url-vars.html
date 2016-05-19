@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/carbon-route/carbon-location.html">
+<link rel="import" href="../bit-redux/index.html">
+
+<dom-module id='bit-core-url-vars'>
+	<template>
+		<carbon-location
+			use-hash-as-path="[[useHashAsPath]]"
+			route="{{route}}">
+		</carbon-location>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	const {
+		setUrlVarsTitle,
+		setUrlVarsQuery,
+		setUrlVarsEvent
+	} = window.BIT.Redux.actions.urlVars
+
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-core-url-vars'
+			this.hostAttributes = {
+				hidden: true
+			}
+			this.properties = {
+				route: {
+					type: Object,
+					observer: '_routeChanged'
+				},
+				useHashAsPath:{
+					type: Boolean
+				}
+			}
+		}
+
+		_routeChanged(route){
+			const title = route.__queryParams.title || '31T'
+			const query = route.__queryParams.query || {}
+			const event = route.path.replace('!', '').replace('/', '') || 'demo'
+
+			setUrlVarsTitle(title)
+			setUrlVarsQuery(query)
+			setUrlVarsEvent(event)
+		}
+
+	}
+	Polymer(Class);
+})();
+</script>

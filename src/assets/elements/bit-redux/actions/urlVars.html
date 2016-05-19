@@ -1,0 +1,33 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const {
+		SET_URL_VARS_TITLE,
+		SET_URL_VARS_QUERY,
+		SET_URL_VARS_EVENT
+	} = window.BIT.Redux.constants.actionTypes
+
+	const {
+		dispatch,
+		getState
+	} = window.BIT.Redux.store.store
+
+	EXPORT.setUrlVarsTitle = (title) => dispatch({
+		type: SET_URL_VARS_TITLE,
+		payload: title
+	})
+
+	EXPORT.setUrlVarsQuery = (query) => dispatch({
+		type: SET_URL_VARS_QUERY,
+		payload: query
+	})
+
+	EXPORT.setUrlVarsEvent = (event) => dispatch({
+		type: SET_URL_VARS_EVENT,
+		payload: event
+	})
+
+	window.BIT.Redux.actions.urlVars = EXPORT
+})();
+</script>

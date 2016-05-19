@@ -148,7 +148,7 @@
 			 	() => {
 					if(this.currentCombination) removeCombination(this.currentCombination)
 				},
-				5000
+				this._slideIterval || 5000
 			)
 		}
 
@@ -170,6 +170,9 @@
 		_routeChanged(route){
 			const title = route.__queryParams.title || 'Combinations'
 			const createdFrom = route.__queryParams.created || new Date()
+			const slideInterval = (route.__queryParams.interval || 5) * 1000
+
+			this._slideIterval = slideInterval
 
 			setTitle(title)
 			setCreatedFrom(createdFrom)

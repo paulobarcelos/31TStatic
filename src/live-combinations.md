@@ -1,6 +1,6 @@
 ---
 layout: default
-object_id: home
+object_id: live-cobinations
 title: 31T
 ---
 

@@ -1,0 +1,131 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bit-redux/index.html">
+
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+<link rel="import" href="../bit-core-reducer-adder/bit-core-reducer-adder.html">
+<link rel="import" href="../bit-core-url-vars/bit-core-url-vars.html">
+
+
+<dom-module id='bit-app-flavor-frequency'>
+	<style></style>
+	<template>
+
+		<bit-core-reducer-adder
+			reducers="[[reducers]]">
+		</bit-core-reducer-adder>
+
+		<bit-core-url-vars
+			use-hash-as-path>
+		</bit-core-url-vars>
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	const {
+		HasState
+	} = window.BIT.Behaviors
+
+	const {
+		flavors: flavorReducers,
+		combinations: combinationsReducers,
+		endpoints: endpointsReducers,
+		urlVars: urlVarsReducers
+	} = window.BIT.Redux.reducers
+
+	const {
+		setApiEndpoint,
+		setRootEndpoint,
+		setHomeEndpoint
+	} = window.BIT.Redux.actions.endpoints
+
+	const {
+		fetchAndSetCombinations
+	} = window.BIT.Redux.actions.combinations
+
+	const {
+		fetchAndSetFlavors
+	} = window.BIT.Redux.actions.flavors
+
+	const {
+		urlVarsTitleSelector,
+		urlVarsQuerySelector,
+		urlVarsEventSelector
+	} = window.BIT.Redux.selectors.urlVars
+
+
+
+	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-app-flavor-frequency'
+			this.properties = {
+				apiUrl: {
+					type: String
+				},
+				rootUrl: {
+					type: String
+				},
+				homeUrl: {
+					type: String
+				},
+				reducers: {
+					type: Object,
+					value: {
+						...flavorReducers,
+						...combinationsReducers,
+						...endpointsReducers,
+						...urlVarsReducers
+					}
+				},
+				query: {
+					type: Object,
+					observer: '_queryChanged'
+				},
+				event: {
+					type: Object,
+				},
+				title:{
+					type: String
+				}
+			}
+
+			this.observers = [
+				'_applyEventToApiEndpoint(apiUrl, event)'
+			]
+		}
+
+		ready(){
+			this.async(()=> {
+				setRootEndpoint(this.rootUrl)
+				setHomeEndpoint(this.homeUrl)
+			})
+		}
+
+		_queryChanged(query){
+			this.debounce('_queryChanged', () => {
+				fetchAndSetFlavors()
+				fetchAndSetCombinations(query)
+			})
+		}
+
+		_applyEventToApiEndpoint(apiUrl, event){
+			setApiEndpoint(this.apiUrl.replace('{{EVENT}}', event))
+		}
+
+		_stateChanged(state){
+			this.title = urlVarsTitleSelector(state)
+			this.event = urlVarsEventSelector(state)
+			this.query = urlVarsQuerySelector(state)
+		}
+	}
+	Polymer(Class);
+})();
+</script>
