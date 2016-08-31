@@ -12,10 +12,10 @@
     "page": "visionmedia/page.js#4895e378a7080a519390e286a22b02a87a055b10",
     "observe-js": "0.5.7",
     "node-uuid": "1.4.7",
-    "redux": "https://npmcdn.com/redux@3.5.2/dist/redux.min.js",
-    "redux-thunk": "https://npmcdn.com/redux-thunk@2.1.0/dist/redux-thunk.min.js",
-    "redux-logger": "https://npmcdn.com/redux-logger@2.6.1/dist/index.min.js",
-    "reselect": "https://npmcdn.com/reselect@2.5.1/dist/reselect.js",
+    "redux": "https://unpkg.com/redux@3.5.2/dist/redux.min.js",
+    "redux-thunk": "https://unpkg.com/redux-thunk@2.1.0/dist/redux-thunk.min.js",
+    "redux-logger": "https://unpkg.com/redux-logger@2.6.1/dist/index.min.js",
+    "reselect": "https://unpkg.com/reselect@2.5.1/dist/reselect.js",
     "fetch": "1.0.0"
   }
 }
