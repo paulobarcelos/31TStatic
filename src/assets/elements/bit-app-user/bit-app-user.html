@@ -1,11 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/carbon-route/carbon-location.html">
 
 <link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
 
 <link rel="import" href="../bit-core-persistent-store/bit-core-persistent-store.html">
 <link rel="import" href="../bit-core-reducer-adder/bit-core-reducer-adder.html">
 <link rel="import" href="../bit-core-flavors-loader/bit-core-flavors-loader.html">
+<link rel="import" href="../bit-core-url-vars/bit-core-url-vars.html">
 
 <link rel="import" href="../bit-container-user-combination-picker/bit-container-user-combination-picker.html">
 <link rel="import" href="../bit-container-user-combination-result/bit-container-user-combination-result.html">
@@ -14,14 +14,13 @@
 	<style></style>
 	<template>
 
-		<carbon-location
-			use-hash-as-path
-			route="{{route}}">
-		</carbon-location>
-
 		<bit-core-persistent-store
-			local-storage-key="bit-app-user-[[_event]]">
+			local-storage-key="bit-app-user">
 		</bit-core-persistent-store>
+
+		<bit-core-url-vars
+			use-hash-as-path>
+		</bit-core-url-vars>
 
 		<bit-core-reducer-adder
 			reducers="[[reducers]]">
@@ -45,16 +44,20 @@
 
 <script>
 (() => {
+	// Behaviors
 	const {
 		HasState
 	} = window.BIT.Behaviors
 
+	// Reducers
 	const {
 		flavors: flavorReducers,
 		userCombination: userCombinationReducers,
-		endpoints: endpointsReducers
+		endpoints: endpointsReducers,
+		urlVars: urlVarsReducers
 	} = window.BIT.Redux.reducers
 
+	// Actions
 	const {
 		setApiEndpoint,
 		setRootEndpoint,
@@ -64,6 +67,15 @@
 	const {
 		clearCombination
 	} = window.BIT.Redux.actions.userCombination
+
+	const {
+		hydrateState
+	} = window.BIT.Redux.actions.store
+
+	// Selectors
+	const {
+		urlVarsEventSelector
+	} = window.BIT.Redux.selectors.urlVars
 
 	const {
 		userIsDisplayingResultSelector
@@ -96,43 +108,38 @@
 					value: {
 						...flavorReducers,
 						...userCombinationReducers,
-						...endpointsReducers
+						...endpointsReducers,
+						...urlVarsReducers
 					}
 				},
-				route: {
-					type: Object,
-					observer: '_routeChanged'
-
+				event: {
+					type: String
 				},
-				_event: {
-					type: String,
-					value: 'demo'
+				title:{
+					type: String
 				}
 			}
 
 			this.observers = [
-				'_applyEventToApi(apiUrl, _event)'
+				'_applyEventToApi(apiUrl, event)'
 			]
 		}
 
 		ready(){
-			this.async(()=> {
+			this.debounce('setEndpoints',() => {
 				setRootEndpoint(this.rootUrl)
 				setHomeEndpoint(this.homeUrl)
-			})
+			},1)
 		}
 
-		_applyEventToApi(apiUrl, _event){
+		_applyEventToApi(apiUrl, event){
 			this.debounce('api endpoint', ()=> {
-				setApiEndpoint(this.apiUrl.replace('{{EVENT}}', _event))
+				setApiEndpoint(this.apiUrl.replace('{{EVENT}}', event))
 			})
-		}
-
-		_routeChanged(route){
-			this._event = route.path.replace('!', '').replace('/', '')
 		}
 
 		_stateChanged(state){
+			this.event = urlVarsEventSelector(state)
 			this.isDisplayingResult = userIsDisplayingResultSelector(state)
 			if(this.isDisplayingResult){
 				this.async(()=> clearCombination(), 5000)
