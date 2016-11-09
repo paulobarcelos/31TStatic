@@ -14,9 +14,11 @@
 <script>
 (() => {
 	const {
+
 		setUrlVarsTitle,
 		setUrlVarsQuery,
-		setUrlVarsEvent
+		setUrlVarsEvent,
+		setUrlVarsFeaturedFlavors
 	} = window.BIT.Redux.actions.urlVars
 
 	class Class {
@@ -37,14 +39,38 @@
 		}
 
 		_routeChanged(route){
-			const title = route.__queryParams.title || '31T'
-			const query = route.__queryParams.query || {}
-			const event = route.path.replace('!', '').replace('/', '') || 'demo'
+			this.debounce('setUrlVarData',() => {
+				const parser = document.createElement('a')
+				parser.href = route.path.replace('!', '').replace('/', '')
 
-			setUrlVarsTitle(title)
-			setUrlVarsQuery(query)
-			setUrlVarsEvent(event)
+				const event = parser.pathname.split('/')[1]
+				setUrlVarsEvent(event)
+
+				const title = route.__queryParams.title || '31T'
+				setUrlVarsTitle(title)
+
+				let query
+				try {
+					query = JSON.parse(route.__queryParams.query )
+				}
+				catch(e){
+					query = null
+				}
+				query = query || {}
+				setUrlVarsQuery(query)
+
+				let featuredFlavors
+				try {
+					featuredFlavors = JSON.parse(route.__queryParams.featuredFlavors )
+				}
+				catch(e){
+					featuredFlavors = null
+				}
+				featuredFlavors = featuredFlavors || {}
+				setUrlVarsFeaturedFlavors(featuredFlavors)				
+			},0)
 		}
+
 
 	}
 	Polymer(Class);

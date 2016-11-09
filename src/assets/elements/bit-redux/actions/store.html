@@ -1,0 +1,17 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const {
+		HYDRATE_STATE
+	} = window.BIT.Redux.constants.actionTypes
+	const { dispatch, getState } = window.BIT.Redux.store.store
+
+	EXPORT.hydrateState = (state = {}) => dispatch({
+		type: HYDRATE_STATE,
+		payload: state
+	})
+
+	window.BIT.Redux.actions.store = EXPORT
+})();
+</script>

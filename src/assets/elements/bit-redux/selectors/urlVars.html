@@ -3,6 +3,19 @@
 (() => {
 	const EXPORT = {}
 
+	const {
+		createSelector
+	} = window.Reselect;
+
+	const {
+		flavorsMapSelector,
+		formatFlavor
+	} = window.BIT.Redux.selectors.flavors
+
+	const {
+		homeEndpointSelector
+	} = window.BIT.Redux.selectors.endpoints
+
 	EXPORT.urlVarsTitleSelector = state =>
 		state.urlVars && state.urlVars.title ? state.urlVars.title : ''
 
@@ -11,6 +24,27 @@
 
 	EXPORT.urlVarsEventSelector = state =>
 		state.urlVars && state.urlVars.event ? state.urlVars.event : ''
+
+	EXPORT.urlVarsFeaturedFlavorsSelector = createSelector(
+		[
+			state =>
+				state.urlVars && typeof state.urlVars.featuredFlavors.length !== 'undefined' ?
+					state.urlVars.featuredFlavors : [],
+			state =>
+				state.userCombination && typeof state.userCombination.flavors.length !== 'undefined' ?
+					state.userCombination.flavors : [],
+			flavorsMapSelector,
+			homeEndpointSelector
+		],
+		(idList, userPickedIdList, map, endpoint) =>
+			idList.map((id) =>
+				formatFlavor(
+					map[id],
+					endpoint,
+					userPickedIdList.indexOf(id) !== -1
+				)
+			)
+	)
 
 	window.BIT.Redux.selectors.urlVars = EXPORT
 })()

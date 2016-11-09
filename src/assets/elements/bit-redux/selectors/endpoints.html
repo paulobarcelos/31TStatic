@@ -12,6 +12,12 @@
 	EXPORT.endpointApiCombinationsSelector = state =>
 		state.endpoints && state.endpoints.api ? `${state.endpoints.api}/combinations` : ''
 
+	EXPORT.homeEndpointSelector = state =>
+		state.endpoints ? state.endpoints.home : ''
+
+	EXPORT.rootEndpointSelector = state =>
+		state.endpoints ? state.endpoints.root : ''
+
 	window.BIT.Redux.selectors.endpoints = EXPORT
 })()
 </script>

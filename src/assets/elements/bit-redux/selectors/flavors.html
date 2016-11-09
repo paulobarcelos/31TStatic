@@ -6,6 +6,10 @@
 		createSelector
 	} = window.Reselect;
 
+	const {
+		homeEndpointSelector
+	} = window.BIT.Redux.selectors.endpoints
+
 	EXPORT.formatFlavor = (flavor, endpoint, userPicked) => {
 		return {
 			...flavor,
@@ -31,16 +35,13 @@
 	EXPORT.flavorsUpdatedAtSelector = state =>
 		state.flavors ? state.flavors.updatedAt : 0
 
-	EXPORT.homeEndpointSelector = state =>
-		state.endpoints ? state.endpoints.home : ''
-
 
 	EXPORT.flavorListSelector = createSelector(
 		[
 			EXPORT.flavorsIdListSelector,
 			EXPORT.userPickedFlavorsIdListSelector,
 			EXPORT.flavorsMapSelector,
-			EXPORT.homeEndpointSelector
+			homeEndpointSelector
 		],
 		(idList, userPickedIdList, map, endpoint) =>
 			idList.map((id) =>

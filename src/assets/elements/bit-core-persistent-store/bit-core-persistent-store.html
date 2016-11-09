@@ -1,15 +1,16 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+
 <link rel="import" href="../bit-redux/index.html">
 
 <dom-module id='bit-core-persistent-store'>
 	<template>
 		<iron-localstorage
 			name="[[localStorageKey]]"
-			value="{{state}}"
-			on-iron-localstorage-load="_hydrate"
-			on-iron-localstorage-load-empty="_hydrate">
+			value="{{persistedState}}"
+			on-iron-localstorage-load="_hydrate">
 		</iron-localstorage>
 	</template>
 </dom-module>
@@ -17,14 +18,19 @@
 <script>
 (() => {
 	const {
-		store
-	} = window.BIT.Redux.store
+		HasState
+	} = window.BIT.Behaviors
 
 	const {
-		HYDRATE_STATE
-	} = window.BIT.Redux.constants.actionTypes
+		hydrateState
+	} = window.BIT.Redux.actions.store
 
 	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
 		beforeRegister() {
 			this.is = 'bit-core-persistent-store'
 			this.hostAttributes = {
@@ -34,27 +40,18 @@
 				localStorageKey:{
 					type: String
 				},
-				state: {
-					type: Object,
-					notify: true
+				persistedState: {
+					type: Object
 				}
 			}
 		}
 
-		ready(){
-			this._unsubscribeStore = store.subscribe(this._storeUpdated.bind(this))
+		_stateChanged(state){
+			this.persistedState = state
 		}
-		detached(){
-			this._unsubscribeStore()
-		}
-		_storeUpdated(){
-			this.state = store.getState()
-		}
+
 		_hydrate() {
-			store.dispatch({
-				type: HYDRATE_STATE,
-				payload: this.state || {}
-			})
+			hydrateState(this.persistedState || {})
 		}
 	}
 	Polymer(Class);
