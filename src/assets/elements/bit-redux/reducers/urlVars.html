@@ -5,10 +5,11 @@
 	const {
 		SET_URL_VARS_TITLE,
 		SET_URL_VARS_QUERY,
-		SET_URL_VARS_EVENT
+		SET_URL_VARS_EVENT,
+		SET_URL_VARS_FEATURED_FLAVORS
 	} = window.BIT.Redux.constants.actionTypes
 
-	const title = (state = '31T', action) => {
+	const title = (state = '', action) => {
 		switch (action.type) {
 			case SET_URL_VARS_TITLE:
 				return action.payload
@@ -32,9 +33,18 @@
 		}
 	}
 
-	const event = (state = 'demo', action) => {
+	const event = (state = '', action) => {
 		switch (action.type) {
 			case SET_URL_VARS_EVENT:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	const featuredFlavors = (state = [], action) => {
+		switch (action.type) {
+			case SET_URL_VARS_FEATURED_FLAVORS:
 				return action.payload
 			default:
 				return state
@@ -44,7 +54,8 @@
 	EXPORT.urlVars = window.Redux.combineReducers({
 		title,
 		query,
-		event
+		event,
+		featuredFlavors
 	})
 
 	window.BIT.Redux.reducers.urlVars = EXPORT

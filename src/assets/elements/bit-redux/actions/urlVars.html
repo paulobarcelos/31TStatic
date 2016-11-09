@@ -5,7 +5,8 @@
 	const {
 		SET_URL_VARS_TITLE,
 		SET_URL_VARS_QUERY,
-		SET_URL_VARS_EVENT
+		SET_URL_VARS_EVENT,
+		SET_URL_VARS_FEATURED_FLAVORS
 	} = window.BIT.Redux.constants.actionTypes
 
 	const {
@@ -26,6 +27,11 @@
 	EXPORT.setUrlVarsEvent = (event) => dispatch({
 		type: SET_URL_VARS_EVENT,
 		payload: event
+	})
+
+	EXPORT.setUrlVarsFeaturedFlavors = (flavors) => dispatch({
+		type: SET_URL_VARS_FEATURED_FLAVORS,
+		payload: flavors
 	})
 
 	window.BIT.Redux.actions.urlVars = EXPORT
