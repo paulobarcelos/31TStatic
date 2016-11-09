@@ -105,9 +105,9 @@ gulp.task('js', function() {
   return gulp.src([DEST_DEV + '/**/*.{js,html}', '!'+DEST_DEV+'/assets/bower_components/**/*'])
 
 	// Extract JS from .html files
-	.pipe($.if('*.html', $.crisper({scriptInHead:false})))
+	.pipe($.if('/**/*.html', $.crisper({scriptInHead:false})))
 	.pipe($.sourcemaps.init())
-	.pipe($.if('*.js', $.babel({
+	.pipe($.if('/**.*.js', $.babel({
 		presets: ['es2015', 'stage-0'],
 		plugins: ['transform-object-rest-spread']
 	})))
@@ -133,9 +133,9 @@ gulp.task('soft-js', function() {
 	}))
 
 	// Extract JS from .html files
-	.pipe($.if('*.html', $.crisper({scriptInHead:false})))
+	.pipe($.if('/**/*.html', $.crisper({scriptInHead:false})))
 	.pipe($.sourcemaps.init())
-	.pipe($.if('*.js', $.babel({
+	.pipe($.if('/**/*.js', $.babel({
 		presets: ['es2015', 'stage-0'],
 		plugins: ['transform-object-rest-spread']
 	})))
@@ -175,7 +175,7 @@ gulp.task('polymer-use-minified-paths', function () {
 	.pipe($.replace('bower_components/webcomponentsjs/webcomponents-lite.js', 'bower_components/webcomponentsjs/webcomponents-lite.min.js'))
 	.pipe($.replace('bower_components/webcomponentsjs/webcomponents.js', 'bower_components/webcomponentsjs/webcomponents.min.js'))
 	// Minify HTML
-	.pipe($.if('*.html', $.minifyHtml()))
+	.pipe($.if('/**/*.html', $.minifyHtml()))
 	// Output Files
 	.pipe(gulp.dest(DEST_POLYMER))
 	.pipe($.size({title: 'polymer-minify'}));
