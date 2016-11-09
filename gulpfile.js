@@ -102,16 +102,17 @@ gulp.task('jekyll', function (gulpCallBack){
  */
 
 gulp.task('js', function() {
-  return gulp.src([DEST_DEV + '/**/*.{js,html}', '!'+DEST_DEV+'/assets/bower_components/**/*'])
+	return gulp.src([DEST_DEV + '/**/*.{js,html}', '!'+DEST_DEV+'/assets/bower_components/**/*'])
 
 	// Extract JS from .html files
 	.pipe($.if('/**/*.html', $.crisper({scriptInHead:false})))
 	.pipe($.sourcemaps.init())
-	.pipe($.if('/**.*.js', $.babel({
+	.pipe($.if('/**/*.js', $.babel({
 		presets: ['es2015', 'stage-0'],
 		plugins: ['transform-object-rest-spread']
 	})))
 	.pipe($.sourcemaps.write())
+
 	.pipe(gulp.dest(DEST_DEV));
 });
 
@@ -120,7 +121,7 @@ gulp.task('js', function() {
  */
 
 gulp.task('soft-js', function() {
-  return gulp.src([DEST_DEV + '/**/*.{js,html}', '!'+DEST_DEV+'/assets/bower_components/**/*'])
+	return gulp.src([DEST_DEV + '/**/*.{js,html}', '!'+DEST_DEV+'/assets/bower_components/**/*'])
 
 	.pipe($.plumber({
 		errorHandler: function(error) {
