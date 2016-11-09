@@ -178,7 +178,9 @@
 		}
 
 		_featuredFlavorsChanged(flavors){
-			flavors.forEach(flavor => addFlavor(flavor.id))
+			flavors
+			.filter(flavor => !flavor.userPicked)
+			.forEach(flavor => addFlavor(flavor.id))
 		}
 
 		_stateChanged(state){
@@ -193,6 +195,10 @@
 
 		_flavorTapped(e){
 			const flavor = e.detail
+
+			if(this.featuredFlavors.filter(featuredFlavor => featuredFlavor.id === flavor.id).length){
+				return
+			}
 			if(flavor.userPicked){
 				removeFlavor(flavor.id)
 			}
