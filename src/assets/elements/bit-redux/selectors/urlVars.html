@@ -27,8 +27,12 @@
 
 	EXPORT.urlVarsFeaturedFlavorsSelector = createSelector(
 		[
-			state => state.urlVars && state.urlVars.featuredFlavors ? state.urlVars.featuredFlavors : [],
-			state => state.userCombination.flavors,
+			state =>
+				state.urlVars && typeof state.urlVars.featuredFlavors.length !== 'undefined' ?
+					state.urlVars.featuredFlavors : [],
+			state =>
+				state.userCombination && typeof state.userCombination.flavors.length !== 'undefined' ?
+					state.userCombination.flavors : [],
 			flavorsMapSelector,
 			homeEndpointSelector
 		],
