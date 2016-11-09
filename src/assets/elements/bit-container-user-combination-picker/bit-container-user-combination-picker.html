@@ -94,6 +94,7 @@
 		HasState
 	} = window.BIT.Behaviors
 
+	// Selectors
 	const {
 		flavorListSelector
 	} = window.BIT.Redux.selectors.flavors
@@ -106,6 +107,12 @@
 		userCanSendSelector
 	} = window.BIT.Redux.selectors.userCombination
 
+
+	const {
+		urlVarsFeaturedFlavorsSelector
+	} = window.BIT.Redux.selectors.urlVars
+
+	// Actions
 	const {
 		setUserId,
 		addFlavor,
@@ -133,6 +140,10 @@
 				},
 				flavors: {
 					type: Array
+				},
+				featuredFlavors:{
+					type: Array,
+					observer: '_featuredFlavorsChanged'
 				},
 				userPickedFlavors: {
 					type: Array
@@ -166,6 +177,10 @@
 			})
 		}
 
+		_featuredFlavorsChanged(flavors){
+			flavors.forEach(flavor => addFlavor(flavor.id))
+		}
+
 		_stateChanged(state){
 			this.userId = userIdSelector(state)
 			this.flavors = flavorListSelector(state)
@@ -173,6 +188,7 @@
 			this.rating = userRatingSelector(state)
 			this.comment = userCommentSelector(state)
 			this.canSend = userCanSendSelector(state)
+			this.featuredFlavors = urlVarsFeaturedFlavorsSelector(state)
 		}
 
 		_flavorTapped(e){
