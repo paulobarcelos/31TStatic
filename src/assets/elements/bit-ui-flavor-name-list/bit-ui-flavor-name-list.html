@@ -41,6 +41,9 @@
 			}
 		}
 		_sortBySize(a, b){
+			if(typeof a === 'undefined' || typeof b === 'undefined'){
+				return
+			}
 			if(a.size === b.size){
 				return ((a.width * a.height) > (b.width * b.height)) ? 1 : -1
 			}

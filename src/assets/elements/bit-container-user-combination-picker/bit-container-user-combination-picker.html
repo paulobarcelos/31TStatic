@@ -56,7 +56,7 @@
 
 			<bit-ui-flavor-scrollable-list
 				on-flavor-tap="_flavorTapped"
-				flavors="[[flavors]]">
+				flavors="[[selectableFlavors]]">
 			</bit-ui-flavor-scrollable-list>
 
 			<bit-ui-flavor-name-list
@@ -148,6 +148,10 @@
 				userPickedFlavors: {
 					type: Array
 				},
+				selectableFlavors: {
+					type: Array,
+					computed: '_computeSelectableFlavors(flavors, featuredFlavors)'
+				},
 				rating: {
 					type: Number
 				},
@@ -181,6 +185,14 @@
 			flavors
 			.filter(flavor => !flavor.userPicked)
 			.forEach(flavor => addFlavor(flavor.id))
+		}
+
+		_computeSelectableFlavors(flavors, featuredFlavors){
+			return flavors.filter(
+				flavor => featuredFlavors.filter(
+					featuredFlavor => featuredFlavor.id === flavor.id
+				).length === 0
+			)
 		}
 
 		_stateChanged(state){

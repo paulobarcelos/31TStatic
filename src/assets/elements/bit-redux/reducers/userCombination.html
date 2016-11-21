@@ -33,6 +33,9 @@
 			case USER_CLEAR_COMBINATION:
 				return []
 			case USER_ADD_FLAVOR:
+				if(!action || !action.payload){
+					return state
+				}
 				if(state.length >= 3){
 					return state
 				}
