@@ -34,8 +34,8 @@
 		}
 
 		bit-ui-rating{
-			margin-top: 10px;
-			margin-bottom: 30px;
+			/*margin-top: 10px;
+			margin-bottom: 30px;*/
 		}
 
 		bit-ui-comment-input{
@@ -55,11 +55,12 @@
 		<div class="container">
 
 			<bit-ui-flavor-scrollable-list
-				on-flavor-tap="_flavorTapped"
-				flavors="[[flavors]]">
+				on-flavor-tap="_flavorImageTapped"
+				flavors="[[selectableFlavors]]">
 			</bit-ui-flavor-scrollable-list>
 
 			<bit-ui-flavor-name-list
+				on-flavor-tap="_flavorNameTapped"
 				flavors="[[userPickedFlavors]]">
 			</bit-ui-flavor-name-list>
 
@@ -148,6 +149,10 @@
 				userPickedFlavors: {
 					type: Array
 				},
+				selectableFlavors: {
+					type: Array,
+					computed: '_computeSelectableFlavors(flavors, featuredFlavors)'
+				},
 				rating: {
 					type: Number
 				},
@@ -183,6 +188,14 @@
 			.forEach(flavor => addFlavor(flavor.id))
 		}
 
+		_computeSelectableFlavors(flavors, featuredFlavors){
+			return flavors.filter(
+				flavor => featuredFlavors.filter(
+					featuredFlavor => featuredFlavor.id === flavor.id
+				).length === 0
+			)
+		}
+
 		_stateChanged(state){
 			this.userId = userIdSelector(state)
 			this.flavors = flavorListSelector(state)
@@ -193,7 +206,7 @@
 			this.featuredFlavors = urlVarsFeaturedFlavorsSelector(state)
 		}
 
-		_flavorTapped(e){
+		_flavorImageTapped(e){
 			const flavor = e.detail
 
 			if(this.featuredFlavors.filter(featuredFlavor => featuredFlavor.id === flavor.id).length){
@@ -205,6 +218,11 @@
 			else{
 				addFlavor(flavor.id)
 			}
+		}
+
+		_flavorNameTapped(e){
+			const flavor = e.detail
+			console.log(flavor)
 		}
 
 		_onRateTap(e) {

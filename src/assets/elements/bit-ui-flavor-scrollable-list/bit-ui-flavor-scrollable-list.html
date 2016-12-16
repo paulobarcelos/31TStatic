@@ -27,16 +27,18 @@
 	<template>
 
 		<div id="container">
-			<template
-				is="dom-repeat"
-				items="[[flavors]]">
-				<bit-ui-single-flavor
-					on-tap="_flavorTapped"
-					flavor="[[item]]"
-					resolution="low"
-					canvas-vertical-units=5>
-				</bit-ui-single-flavor>
-			</template>
+			<div id="wrapper">
+				<template
+					is="dom-repeat"
+					items="[[flavors]]">
+					<bit-ui-single-flavor
+						on-tap="_flavorTapped"
+						flavor="[[item]]"
+						resolution="low"
+						canvas-vertical-units=5>
+					</bit-ui-single-flavor>
+				</template>
+			</div>
 		</div>
 	</template>
 </dom-module>

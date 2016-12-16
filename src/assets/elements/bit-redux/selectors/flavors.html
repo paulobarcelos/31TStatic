@@ -11,13 +11,19 @@
 	} = window.BIT.Redux.selectors.endpoints
 
 	EXPORT.formatFlavor = (flavor, endpoint, userPicked) => {
+		let id
+		let label
+		if(flavor){
+			id = flavor._id
+			label = flavor.label
+		}
 		return {
 			...flavor,
-			id: flavor._id,
+			id: id,
 			imageUrl : {
-				low: `${endpoint}/assets/images/flavors/low/${flavor.label}.png`,
-				medium: `${endpoint}/assets/images/flavors/medium/${flavor.label}.png`,
-				high: `${endpoint}/assets/images/flavors/high/${flavor.label}.png`,
+				low: `${endpoint}/assets/images/flavors/low/${label}.png`,
+				medium: `${endpoint}/assets/images/flavors/medium/${label}.png`,
+				high: `${endpoint}/assets/images/flavors/high/${label}.png`,
 			},
 			userPicked
 		}
