@@ -24,7 +24,11 @@
 				is="dom-repeat"
 				items="[[flavors]]"
 				sort="_sortBySize">
-				<div>[[item.name]]</div>
+				<div>
+					<div on-tap='_flavorTapped'>
+						[[item.name]]
+					</div>
+				</div>
 			</template>
 	</template>
 </dom-module>
@@ -40,6 +44,11 @@
 				}
 			}
 		}
+
+		_flavorTapped(e){
+			this.fire('flavor-tap', e.model.item)
+		}
+
 		_sortBySize(a, b){
 			if(typeof a === 'undefined' || typeof b === 'undefined'){
 				return
