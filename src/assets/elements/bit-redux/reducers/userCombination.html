@@ -10,7 +10,7 @@
 		USER_REMOVE_FLAVOR,
 		USER_SET_RATING,
 		USER_SET_COMMENT,
-		USER_SEND_COMBINATION,
+		USER_SEND_COMBINATION_START,
 		USER_HIDE_RESULT
 	} = window.BIT.Redux.constants.actionTypes
 
@@ -86,7 +86,7 @@
 		switch (action.type) {
 			case USER_CLEAR_COMBINATION:
 				return false
-			case USER_SEND_COMBINATION:
+			case USER_SEND_COMBINATION_START:
 				return true
 			case USER_HIDE_RESULT:
 				return false
