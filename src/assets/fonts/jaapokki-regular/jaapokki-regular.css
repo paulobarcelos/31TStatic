@@ -1,7 +1,9 @@
 @font-face {
     font-family: 'jaapokki-regular';
-    src: url('jaapokki-regular-webfont.woff2') format('woff2'),
-        url('jaapokki-regular-webfont.woff') format('woff');
+    src: url('jaapokki-regular.eot'); /* IE9 Compat Modes */
+	src: url('jaapokki-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		url('jaapokki-regular.woff') format('woff'), /* Pretty Modern Browsers */
+		url('jaapokki-regular.ttf')  format('truetype'); /* Safari, Android, iOS */
     font-weight: normal;
     font-style: normal;
 }
