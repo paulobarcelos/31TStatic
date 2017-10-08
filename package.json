@@ -51,6 +51,7 @@
   "scripts": {
     "gulp": "node ./node_modules/gulp/bin/gulp.js",
     "gulp:xunit": "npm run gulp -- --reporter xunit",
+    "develop": "npm run gulp -- watch:dev",
     "deploy:stage": "npm run gulp -- deploy --environment=stage",
     "deploy:production": "npm run gulp -- deploy --environment=production"
   },

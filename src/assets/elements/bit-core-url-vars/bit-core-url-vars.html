@@ -44,6 +44,9 @@
 				parser.href = route.path.replace('!', '').replace('/', '')
 
 				const event = parser.pathname.split('/')[1]
+				if (!event) {
+					window.location = '/#!/' + window.LATEST_31T_EVENT
+				}
 				setUrlVarsEvent(event)
 
 				const title = route.__queryParams.title || '31T'
@@ -67,7 +70,7 @@
 					featuredFlavors = null
 				}
 				featuredFlavors = featuredFlavors || {}
-				setUrlVarsFeaturedFlavors(featuredFlavors)				
+				setUrlVarsFeaturedFlavors(featuredFlavors)
 			},0)
 		}
 
