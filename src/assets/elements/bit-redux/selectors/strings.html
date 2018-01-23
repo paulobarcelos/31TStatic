@@ -1,0 +1,37 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const {
+		createSelector
+	} = window.Reselect
+
+	const {
+		launguageSelectedIdSelector
+	} = window.BIT.Redux.selectors.language
+
+
+	EXPORT.stringSelector = createSelector(
+		[
+			(state, { key }) => key,
+			launguageSelectedIdSelector
+		],
+		(key, language) => {
+			const strings = {
+				send : {
+					en : 'Send',
+					th : 'ส่ง'
+				},
+				placeholder : {
+					en : 'This is',
+					th : 'นี่คือ'
+				}
+			}
+
+			return strings[key] && strings[key][language] || key
+		}
+	)
+
+	window.BIT.Redux.selectors.strings = EXPORT
+})()
+</script>

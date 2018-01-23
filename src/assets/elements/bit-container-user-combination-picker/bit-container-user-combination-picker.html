@@ -74,13 +74,14 @@
 				id="commentInput"
 				comment="[[comment]]"
 				on-comment-input="_onCommentInput"
-				on-tap="_cancelEvent">
+				on-tap="_cancelEvent"
+				placeholder="[[placeholderString]]">
 			</bit-ui-comment-input>
 
 			<bit-ui-button
 				enabled="[[canSend]]"
 				on-trigger="_onSendTrigger">
-				Send
+				[[sendString]]
 			</bit-ui-button>
 
 
@@ -96,6 +97,10 @@
 	} = window.BIT.Behaviors
 
 	// Selectors
+	const {
+		stringSelector
+	} = window.BIT.Redux.selectors.strings
+
 	const {
 		flavorListSelector
 	} = window.BIT.Redux.selectors.flavors
@@ -161,6 +166,12 @@
 				},
 				canSend: {
 					type: Boolean
+				},
+				sendString: {
+					type: String
+				},
+				placeholderString: {
+					type: String
 				}
 			}
 
@@ -205,6 +216,8 @@
 			this.comment = userCommentSelector(state)
 			this.canSend = userCanSendSelector(state)
 			this.featuredFlavors = urlVarsFeaturedFlavorsSelector(state)
+			this.sendString = stringSelector(state, { key : 'send' })
+			this.placeholderString = stringSelector(state, { key : 'placeholder' })
 		}
 
 		_flavorImageTapped(e){

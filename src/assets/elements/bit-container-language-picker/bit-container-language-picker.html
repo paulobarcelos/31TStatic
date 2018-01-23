@@ -1,0 +1,72 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="../bit-behavior-has-state/bit-behavior-has-state.html">
+
+<link rel="import" href="../bit-ui-language-list/bit-ui-language-list.html">
+
+<dom-module id='bit-container-language-picker'>
+	<style>
+		:host {
+			position: absolute;
+			top: 0;
+			right: 0;
+			z-index: 1;
+		}
+	</style>
+	<template>
+
+		<bit-ui-language-list
+			on-language-tap="_languageTapped"
+			languages="[[languages]]">
+		</bit-ui-language-list>
+
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	const {
+		HasState
+	} = window.BIT.Behaviors
+
+	const {
+		setLanguage
+	} = window.BIT.Redux.actions.language
+
+	const {
+		launguageListSelector
+	} = window.BIT.Redux.selectors.language
+
+
+	class Class {
+		get behaviors() {
+			return [
+				HasState
+			]
+		}
+
+		beforeRegister() {
+			this.is = 'bit-container-language-picker'
+			this.properties = {
+				languages: {
+					type: Array
+				}
+			}
+
+		}
+
+		_stateChanged(state){
+			this.languages = launguageListSelector(state)
+		}
+
+		_languageTapped(e){
+			const language = e.detail
+			setLanguage(language.id)
+		}
+
+
+	}
+	Polymer(Class);
+})();
+</script>
