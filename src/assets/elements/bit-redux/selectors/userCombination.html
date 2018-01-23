@@ -9,19 +9,19 @@
 	} = window.Reselect;
 
 	const {
-		flavorListSelector
+		flavorListSelector,
+		flavorsMapSelector
 	} = window.BIT.Redux.selectors.flavors;
 
 
-	const userPickedFlavorsIdListSelector = state => state.userCombination.flavors
-	const flavorsMapSelector = state => state.flavors.map
+	EXPORT.userPickedFlavorsIdListSelector = state => state.userCombination.flavors
 
 	EXPORT.userIdSelector = state => state.userCombination.userId
 
 	EXPORT.userPickedFlavorListSelector = createSelector(
 		[
 			flavorListSelector,
-			userPickedFlavorsIdListSelector,
+			EXPORT.userPickedFlavorsIdListSelector,
 			flavorsMapSelector
 		],
 		(flavors, ids) => ids.map(id => {

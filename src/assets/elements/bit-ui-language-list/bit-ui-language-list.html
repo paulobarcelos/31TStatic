@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bit-styles/bit-styles.html">
+
+<dom-module id='bit-ui-language-list'>
+	<style include="bit-typography">
+		:host{
+			@apply(--bit-font);
+			display: block;
+			font-size: 0.8rem;
+			@apply(--layout-horizontal);
+			@apply(--layout-around-justified);
+			margin: 0.5rem;
+		}
+		.language {
+			cursor: pointer;
+		}
+	</style>
+	<template>
+		<template
+			is="dom-repeat"
+			items="[[languages]]">
+			<div
+				class="language"
+				on-tap='_languageTapped'
+				hidden$=[[item.selected]]>
+				[[item.name]]
+			</div>
+		</template>
+	</template>
+</dom-module>
+
+<script>
+(() => {
+	class Class {
+		beforeRegister() {
+			this.is = 'bit-ui-language-list'
+			this.properties = {
+				languages: {
+					type: Array
+				}
+			}
+		}
+
+		_languageTapped(e){
+			this.fire('language-tap', e.model.item)
+		}
+
+	}
+	Polymer(Class)
+})()
+</script>

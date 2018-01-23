@@ -4,22 +4,28 @@
 	const EXPORT = {}
 	const {
 		createSelector
-	} = window.Reselect;
+	} = window.Reselect
 
 	const {
 		homeEndpointSelector
 	} = window.BIT.Redux.selectors.endpoints
 
-	EXPORT.formatFlavor = (flavor, endpoint, userPicked) => {
+	const {
+		launguageSelectedIdSelector
+	} = window.BIT.Redux.selectors.language
+
+	EXPORT.formatFlavor = (flavor, endpoint, userPicked, language) => {
 		let id
 		let label
 		if(flavor){
 			id = flavor._id
 			label = flavor.label
 		}
+		const languageKey = `name${language === 'en' ? '' : `_${language}`}`
 		return {
 			...flavor,
 			id: id,
+			name : flavor[languageKey],
 			imageUrl : {
 				low: `${endpoint}/assets/images/flavors/low/${label}.png`,
 				medium: `${endpoint}/assets/images/flavors/medium/${label}.png`,
@@ -47,14 +53,16 @@
 			EXPORT.flavorsIdListSelector,
 			EXPORT.userPickedFlavorsIdListSelector,
 			EXPORT.flavorsMapSelector,
-			homeEndpointSelector
+			homeEndpointSelector,
+			launguageSelectedIdSelector
 		],
-		(idList, userPickedIdList, map, endpoint) =>
+		(idList, userPickedIdList, map, endpoint, language) =>
 			idList.map((id) =>
 				EXPORT.formatFlavor(
 					map[id],
 					endpoint,
-					userPickedIdList.indexOf(id) !== -1
+					userPickedIdList.indexOf(id) !== -1,
+					language
 				)
 			)
 	)

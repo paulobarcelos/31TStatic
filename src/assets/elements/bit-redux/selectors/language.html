@@ -1,0 +1,37 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+
+	const {
+		createSelector
+	} = window.Reselect
+
+	const languageNames = {
+		en : 'English',
+		th : 'ไทย'
+	}
+
+	EXPORT.launguageSelectedIdSelector = state =>
+		state.language && state.language.selected || ''
+
+	EXPORT.launguageListRawSelector = state =>
+		state.language && state.language.all ? state.language.all.map(id => ({
+			id,
+			name :  languageNames[id]
+		})) : []
+
+	EXPORT.launguageListSelector = createSelector(
+		[
+			EXPORT.launguageSelectedIdSelector,
+			EXPORT.launguageListRawSelector
+		],
+		(selectedId, rawList) => rawList.map(item => ({
+			...item,
+			selected : selectedId === item.id
+		}))
+	)
+
+	window.BIT.Redux.selectors.language = EXPORT
+})()
+</script>

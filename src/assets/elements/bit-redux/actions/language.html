@@ -1,0 +1,23 @@
+<link rel="import" href="../common.html">
+<script>
+(() => {
+	const EXPORT = {}
+	const {
+		SET_LANGUAGES,
+		SET_LANGUAGE
+	} = window.BIT.Redux.constants.actionTypes
+	const { dispatch, getState } = window.BIT.Redux.store.store
+
+	EXPORT.setLanguages = (languages) => dispatch({
+		type: SET_LANGUAGES,
+		payload: languages
+	})
+
+	EXPORT.setLanguage = (language) => dispatch({
+		type: SET_LANGUAGE,
+		payload: language
+	})
+
+	window.BIT.Redux.actions.language = EXPORT
+})();
+</script>

@@ -7,6 +7,7 @@
 <link rel="import" href="../bit-core-flavors-loader/bit-core-flavors-loader.html">
 <link rel="import" href="../bit-core-url-vars/bit-core-url-vars.html">
 
+<link rel="import" href="../bit-container-language-picker/bit-container-language-picker.html">
 <link rel="import" href="../bit-container-user-combination-picker/bit-container-user-combination-picker.html">
 <link rel="import" href="../bit-container-user-combination-result/bit-container-user-combination-result.html">
 
@@ -28,6 +29,9 @@
 
 		<bit-core-flavors-loader>
 		</bit-core-flavors-loader>
+
+		<bit-container-language-picker>
+		</bit-container-language-picker>
 
 		<template is="dom-if" if="[[!isDisplayingResult]]">
 			<bit-container-user-combination-picker>
@@ -52,6 +56,7 @@
 	// Reducers
 	const {
 		flavors: flavorReducers,
+		language: languageReducers,
 		userCombination: userCombinationReducers,
 		endpoints: endpointsReducers,
 		urlVars: urlVarsReducers
@@ -107,6 +112,7 @@
 					type: Object,
 					value: {
 						...flavorReducers,
+						...languageReducers,
 						...userCombinationReducers,
 						...endpointsReducers,
 						...urlVarsReducers

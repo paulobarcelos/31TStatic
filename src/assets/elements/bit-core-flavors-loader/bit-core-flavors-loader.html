@@ -21,6 +21,11 @@
 	} = window.BIT.Redux.actions.flavors
 
 	const {
+		setLanguages,
+		setLanguage
+	} = window.BIT.Redux.actions.language
+
+	const {
 		flavorsUpdatedAtSelector
 	} = window.BIT.Redux.selectors.flavors
 
@@ -74,6 +79,21 @@
 		_responseChanged(response){
 			response = response || []
 			setFlavors(response)
+			// Figure out what are the avaiable languages, based on the "name"
+			// property of the flavors
+			const languages = Object.keys(response.reduce((acc, flavor) => {
+				const nameKeys = Object.keys(flavor).filter(key => key.indexOf('name') === 0)
+				nameKeys.forEach(nameKey => {
+					let clearKey = nameKey.replace('name', '').replace('_', '')
+					if (clearKey === '') {
+						clearKey = 'en'
+					}
+					acc[clearKey] = true
+				})
+				return acc
+			}, {}))
+			setLanguages(languages)
+			setLanguage('en')
 		}
 
 		_stateChanged(state){
