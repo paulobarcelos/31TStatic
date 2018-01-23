@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'pridi';
+    src: url('pridi-medium.ttf')  format('truetype'); /* Safari, Android, iOS */
+    font-weight: medium;
+    font-style: normal;
+}
