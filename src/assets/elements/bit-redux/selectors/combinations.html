@@ -12,10 +12,8 @@
 		formatFlavor
 	} = window.BIT.Redux.selectors.flavors
 
-	const flavorsMapSelector = state => state.flavors ? state.flavors.map : {}
-	const combinationsIdListSelector = state => state.combinations ? state.combinations.list : []
-	const combinationsMapSelector = state => state.combinations ? state.combinations.map : {}
-	const homeEndpointSelector = state => state.endpoints ? state.endpoints.home : ''
+	EXPORT.combinationsIdListSelector = state => state.combinations ? state.combinations.list : []
+	EXPORT.combinationsMapSelector = state => state.combinations ? state.combinations.map : {}
 
 	EXPORT.userRatingSelector = createSelector(
 		[
@@ -44,13 +42,15 @@
 		return rating
 	}
 
-	EXPORT.formatCombination = (combination, endpoint, flavorsMap) => {
+	EXPORT.formatCombination = (combination, endpoint, flavorsMap, language) => {
 		return {
 			...combination,
 			flavors: combination.flavorIds.filter(id =>flavorsMap[id] ).map(
 				id => formatFlavor(
 					flavorsMap[id],
-					endpoint
+					endpoint,
+					false,
+					language
 				)
 			),
 			rating: EXPORT.formatRating(combination.rating)

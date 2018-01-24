@@ -8,5 +8,5 @@ stage:
     ga_code: UX-XXXXXXX-X
 development:
     root: http://localhost:5500
-    api: http://localhost:8000/api
+    api: https://api-31t-{{EVENT}}.herokuapp.com/api
     ga_code: UX-XXXXXXX-X

@@ -13,7 +13,7 @@
 	}
 
 	EXPORT.launguageSelectedIdSelector = state =>
-		state.language && state.language.selected || ''
+		state.language && state.language.selected || 'en'
 
 	EXPORT.launguageListRawSelector = state =>
 		state.language && state.language.all ? state.language.all.map(id => ({

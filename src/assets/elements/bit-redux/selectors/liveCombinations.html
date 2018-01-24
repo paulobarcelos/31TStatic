@@ -9,13 +9,23 @@
 	} = window.Reselect
 
 	const {
-		formatCombination
+		flavorsMapSelector
+	} = window.BIT.Redux.selectors.flavors
+
+	const {
+		formatCombination,
+		combinationsIdListSelector,
+		combinationsMapSelector
 	} = window.BIT.Redux.selectors.combinations
 
-	const flavorsMapSelector = state => state.flavors ? state.flavors.map : {}
-	const combinationsIdListSelector = state => state.combinations ? state.combinations.list : []
-	const combinationsMapSelector = state => state.combinations ? state.combinations.map : {}
-	const homeEndpointSelector = state => state.endpoints ? state.endpoints.home : ''
+	const {
+		homeEndpointSelector
+	} = window.BIT.Redux.selectors.endpoints
+
+	const {
+		launguageSelectedIdSelector
+	} = window.BIT.Redux.selectors.language
+
 
 	EXPORT.liveCombinationsCreatedFromSelector = state => state.liveCombinations.createdFrom.toString()
 	EXPORT.liveCombinationTitleSelector = state => state.liveCombinations.title
@@ -26,11 +36,12 @@
 			combinationsIdListSelector,
 			combinationsMapSelector,
 			flavorsMapSelector,
-			homeEndpointSelector
+			homeEndpointSelector,
+			launguageSelectedIdSelector
 		],
-		(list, map, flavorsMap, endpoint) =>
+		(list, map, flavorsMap, endpoint, language) =>
 			list.length ?
-				formatCombination(map[list[0]], endpoint, flavorsMap) :
+				formatCombination(map[list[0]], endpoint, flavorsMap, language) :
 				null
 	)
 
