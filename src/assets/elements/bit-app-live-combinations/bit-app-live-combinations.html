@@ -143,7 +143,6 @@
 			this.async(()=> {
 				setRootEndpoint(this.rootUrl)
 				setHomeEndpoint(this.homeUrl)
-				this.debounce('')
 				this.debounce('_recursivellyFetchCombinations', this._recursivellyFetchCombinations, 5000)
 			})
 		}
