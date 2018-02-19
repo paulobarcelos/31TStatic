@@ -6,6 +6,7 @@
 
 	const {
 		SET_LIVE_COMBINATIONS_CREATED_FROM,
+		SET_LIVE_COMBINATIONS_CREATED_TO,
 		SET_LIVE_COMBINATIONS_TITLE
 	} = window.BIT.Redux.constants.actionTypes
 
@@ -19,6 +20,11 @@
 
 	EXPORT.setCreatedFrom = (datetime) => dispatch({
 		type: SET_LIVE_COMBINATIONS_CREATED_FROM,
+		payload: datetime
+	})
+
+	EXPORT.setCreatedTo = (datetime) => dispatch({
+		type: SET_LIVE_COMBINATIONS_CREATED_TO,
 		payload: datetime
 	})
 

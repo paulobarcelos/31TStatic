@@ -27,7 +27,8 @@
 	} = window.BIT.Redux.selectors.language
 
 
-	EXPORT.liveCombinationsCreatedFromSelector = state => state.liveCombinations.createdFrom.toString()
+	EXPORT.liveCombinationsCreatedFromSelector = state => state.liveCombinations.createdFrom && state.liveCombinations.createdFrom.toString()
+	EXPORT.liveCombinationsCreatedToSelector = state => state.liveCombinations.createdTo && state.liveCombinations.createdTo.toString()
 	EXPORT.liveCombinationTitleSelector = state => state.liveCombinations.title
 
 
