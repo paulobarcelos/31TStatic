@@ -72,12 +72,14 @@
 	const {
 		fetchRecentCombinations,
 		setCreatedFrom,
+		setCreatedTo,
 		setTitle
 	} = window.BIT.Redux.actions.liveCombinations
 
 
 	const {
 		liveCombinationsCreatedFromSelector,
+		liveCombinationsCreatedToSelector,
 		liveCombinationsCurrentSelector,
 		liveCombinationTitleSelector
 	} = window.BIT.Redux.selectors.liveCombinations
@@ -130,6 +132,9 @@
 				},
 				combinationsCreatedFrom: {
 					type: String
+				},
+				combinationsCreatedTo: {
+					type: String
 				}
 			}
 
@@ -143,7 +148,6 @@
 			this.async(()=> {
 				setRootEndpoint(this.rootUrl)
 				setHomeEndpoint(this.homeUrl)
-				this.debounce('')
 				this.debounce('_recursivellyFetchCombinations', this._recursivellyFetchCombinations, 5000)
 			})
 		}
@@ -158,9 +162,16 @@
 		}
 
 		_recursivellyFetchCombinations(){
+			const created = {}
+			if (this.combinationsCreatedFrom) {
+				created['$gt'] = this.combinationsCreatedFrom
+			}
+			if (this.combinationsCreatedTo) {
+				created['$lt'] = this.combinationsCreatedTo
+			}
 			fetchRecentCombinations({
 				search: {
-					created: { $gt: this.combinationsCreatedFrom }
+					created
 				}
 			})
 			this.debounce('_recursivellyFetchCombinations', this._recursivellyFetchCombinations, 5000)
@@ -175,18 +186,21 @@
 		_routeChanged(route){
 			const title = route.__queryParams.title || 'Combinations'
 			const createdFrom = route.__queryParams.created || new Date()
+			const createdTo = route.__queryParams.ended
 			const slideInterval = (route.__queryParams.interval || 5) * 1000
 
 			this._slideIterval = slideInterval
 
 			setTitle(title)
 			setCreatedFrom(createdFrom)
+			setCreatedTo(createdTo)
 
 			this._event = route.path.replace('!', '').replace('/', '')
 		}
 
 		_stateChanged(state){
 			this.combinationsCreatedFrom = liveCombinationsCreatedFromSelector(state)
+			this.combinationsCreatedTo = liveCombinationsCreatedToSelector(state)
 
 			const newCombination = liveCombinationsCurrentSelector(state) || {}
 			const oldCombination = this.currentCombination || {}
