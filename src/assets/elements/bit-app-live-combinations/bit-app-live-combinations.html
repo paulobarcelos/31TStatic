@@ -186,7 +186,7 @@
 		_routeChanged(route){
 			const title = route.__queryParams.title || 'Combinations'
 			const createdFrom = route.__queryParams.created || new Date()
-			const createdTo = route.__queryParams.ended
+			const createdTo = route.__queryParams.ended || null
 			const slideInterval = (route.__queryParams.interval || 5) * 1000
 
 			this._slideIterval = slideInterval
