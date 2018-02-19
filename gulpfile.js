@@ -318,7 +318,8 @@ gulp.task('s3', ['build:gzip'], function () {
 			'!' + DEST_GZIP + '/**/*.js',
 			'!' + DEST_GZIP + '/**/*.css',
 			'!' + DEST_GZIP + '/**/*.json',
-			'!' + DEST_GZIP + '/**/*.svg'
+			'!' + DEST_GZIP + '/**/*.svg',
+			//'!' + DEST_GZIP + '/**/*.png'
 		])
 		.pipe($.s3(aws, {
 			headers: {
