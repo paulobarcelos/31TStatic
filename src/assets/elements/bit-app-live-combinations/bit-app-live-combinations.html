@@ -183,7 +183,16 @@
 				search.created['$lt'] = this.combinationsCreatedTo
 			}
 			if (this.combinationsRating) {
-				search.rating = window.parseInt(this.combinationsRating)
+				let rating = `${this.combinationsRating}` // to string
+					.split(',') // make array
+					.map(n => window.parseInt(n)) // force int
+					.filter(n => (n >=1 && n <= 5)) // filter valid
+				if(rating.length){
+					search.rating = {
+						$in : rating
+					}
+				}
+
 			}
 			fetchRecentCombinations({
 				search
@@ -244,7 +253,7 @@
 
 			// If there are no more combinations, and loop is set, reset the
 			// "created from"
-			if(!this.currentCombination && this.combinationsLoop && this.combinationsCreatedFrom || this.cachedSettings.createdFro){
+			if(!this.currentCombination && this.combinationsLoop){
 				setCreatedFrom(this.cachedSettings.createdFrom)
 			}
 
