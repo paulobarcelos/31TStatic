@@ -5,7 +5,9 @@
 	const {
 		SET_LIVE_COMBINATIONS_CREATED_FROM,
 		SET_LIVE_COMBINATIONS_CREATED_TO,
-		SET_LIVE_COMBINATIONS_TITLE
+		SET_LIVE_COMBINATIONS_TITLE,
+		SET_LIVE_COMBINATIONS_RATING,
+		SET_LIVE_COMBINATIONS_LOOP,
 	} = window.BIT.Redux.constants.actionTypes
 
 
@@ -36,11 +38,31 @@
 		}
 	}
 
+	const rating = function(state = null, action){
+		switch (action.type) {
+			case SET_LIVE_COMBINATIONS_RATING:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
+	const loop = function(state = false, action){
+		switch (action.type) {
+			case SET_LIVE_COMBINATIONS_LOOP:
+				return action.payload
+			default:
+				return state
+		}
+	}
+
 
 	EXPORT.liveCombinations = window.Redux.combineReducers({
 		createdFrom,
 		createdTo,
-		title
+		title,
+		rating,
+		loop,
 	})
 
 	window.BIT.Redux.reducers.liveCombinations = EXPORT

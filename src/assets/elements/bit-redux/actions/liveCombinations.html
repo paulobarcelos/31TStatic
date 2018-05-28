@@ -7,7 +7,9 @@
 	const {
 		SET_LIVE_COMBINATIONS_CREATED_FROM,
 		SET_LIVE_COMBINATIONS_CREATED_TO,
-		SET_LIVE_COMBINATIONS_TITLE
+		SET_LIVE_COMBINATIONS_TITLE,
+		SET_LIVE_COMBINATIONS_RATING,
+		SET_LIVE_COMBINATIONS_LOOP,
 	} = window.BIT.Redux.constants.actionTypes
 
 	const {
@@ -33,10 +35,20 @@
 		payload: datetime
 	})
 
+	EXPORT.setRating = (rating) => dispatch({
+		type: SET_LIVE_COMBINATIONS_RATING,
+		payload: rating
+	})
+
+	EXPORT.setLoop = (loop) => dispatch({
+		type: SET_LIVE_COMBINATIONS_LOOP,
+		payload: loop
+	})
+
 	EXPORT.fetchRecentCombinations = (query = {}) => new Promise((resolve, reject) => {
 		dispatch(
 			(dispatch, getState) => {
-				fetchAndAddCombinations(query)
+					fetchAndAddCombinations(query)
 				.then(combinations => {
 					if(combinations.length){
 						combinations.sort((a,b) => a.created < b.created ? 1 : -1)
