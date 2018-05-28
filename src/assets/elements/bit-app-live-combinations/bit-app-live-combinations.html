@@ -73,7 +73,9 @@
 		fetchRecentCombinations,
 		setCreatedFrom,
 		setCreatedTo,
-		setTitle
+		setTitle,
+		setRating,
+		setLoop,
 	} = window.BIT.Redux.actions.liveCombinations
 
 
@@ -81,7 +83,9 @@
 		liveCombinationsCreatedFromSelector,
 		liveCombinationsCreatedToSelector,
 		liveCombinationsCurrentSelector,
-		liveCombinationTitleSelector
+		liveCombinationTitleSelector,
+		liveCombinationRatingSelector,
+		liveCombinationLoopSelector,
 	} = window.BIT.Redux.selectors.liveCombinations
 
 
@@ -135,6 +139,12 @@
 				},
 				combinationsCreatedTo: {
 					type: String
+				},
+				combinationsRating: {
+					type: Number
+				},
+				combinationsLoop: {
+					type: Boolean
 				}
 			}
 
@@ -162,17 +172,21 @@
 		}
 
 		_recursivellyFetchCombinations(){
-			const created = {}
+			const search = {
+				created : {}
+			}
+
 			if (this.combinationsCreatedFrom) {
-				created['$gt'] = this.combinationsCreatedFrom
+				search.created['$gt'] = this.combinationsCreatedFrom
 			}
 			if (this.combinationsCreatedTo) {
-				created['$lt'] = this.combinationsCreatedTo
+				search.created['$lt'] = this.combinationsCreatedTo
+			}
+			if (this.combinationsRating) {
+				search.rating = window.parseInt(this.combinationsRating)
 			}
 			fetchRecentCombinations({
-				search: {
-					created
-				}
+				search
 			})
 			this.debounce('_recursivellyFetchCombinations', this._recursivellyFetchCombinations, 5000)
 		}
@@ -188,12 +202,25 @@
 			const createdFrom = route.__queryParams.created || new Date()
 			const createdTo = route.__queryParams.ended || null
 			const slideInterval = (route.__queryParams.interval || 5) * 1000
+			const rating = route.__queryParams.rating || null
+			const loop = route.__queryParams.loop ? true : false
+
+			this.cachedSettings = {
+				title,
+				createdFrom,
+				createdTo,
+				slideInterval,
+				rating,
+				loop,
+			}
 
 			this._slideIterval = slideInterval
 
 			setTitle(title)
 			setCreatedFrom(createdFrom)
 			setCreatedTo(createdTo)
+			setRating(rating)
+			setLoop(loop)
 
 			this._event = route.path.replace('!', '').replace('/', '')
 		}
@@ -201,6 +228,8 @@
 		_stateChanged(state){
 			this.combinationsCreatedFrom = liveCombinationsCreatedFromSelector(state)
 			this.combinationsCreatedTo = liveCombinationsCreatedToSelector(state)
+			this.combinationsRating = liveCombinationRatingSelector(state)
+			this.combinationsLoop = liveCombinationLoopSelector(state)
 
 			const newCombination = liveCombinationsCurrentSelector(state) || {}
 			const oldCombination = this.currentCombination || {}
@@ -212,6 +241,12 @@
 				this.currentCombination = null
 			}
 			this.title = liveCombinationTitleSelector(state)
+
+			// If there are no more combinations, and loop is set, reset the
+			// "created from"
+			if(!this.currentCombination && this.combinationsLoop && this.combinationsCreatedFrom || this.cachedSettings.createdFro){
+				setCreatedFrom(this.cachedSettings.createdFrom)
+			}
 
 		}
 	}

@@ -30,6 +30,8 @@
 	EXPORT.liveCombinationsCreatedFromSelector = state => state.liveCombinations.createdFrom && state.liveCombinations.createdFrom.toString()
 	EXPORT.liveCombinationsCreatedToSelector = state => state.liveCombinations.createdTo && state.liveCombinations.createdTo.toString()
 	EXPORT.liveCombinationTitleSelector = state => state.liveCombinations.title
+	EXPORT.liveCombinationRatingSelector = state => state.liveCombinations.rating
+	EXPORT.liveCombinationLoopSelector = state => state.liveCombinations.loop
 
 
 	EXPORT.liveCombinationsCurrentSelector = createSelector(
