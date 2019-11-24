@@ -82,16 +82,7 @@ gulp.task('jekyll', function (gulpCallBack){
 
 	}
 	var spawn = require('child_process').spawn;
-	var jekyll = spawn(
-		'jekyll', ['build', '--source', SRC, '--destination', DEST_DEV],
-		{
-			stdio: 'inherit',
-			env: {
-				PATH: process.env.PATH,
-				JEKYLL_ENV: environment
-			}
-		}
-	);
+	var jekyll = spawn('sh',['jekyll.sh', environment, SRC, DEST_DEV]);
 	jekyll.on('exit', function(code) {
 		gulpCallBack(code === 0 ? null : 'ERROR: Jekyll process exited with code: '+code);
 	});
