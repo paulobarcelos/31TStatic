@@ -1,5 +1,89 @@
 # 31T Static
 
+## Creating new events
+
+### Create new server instance
+Follow the instructions on the README of the `31tAPI` repo.
+
+### Update the "auto redirect" config
+This is so that `http://app.31t.org` will redirect to the latest event, eg.:
+`http://app.31t.org/#YYMMDD`.
+
+- Open the file `src/_includes/head.html`
+- Modify the `LATEST_31T_EVENT` global var, it should be in a script tag like:
+	- ```
+	<script>
+		window.Polymer = window.Polymer || {};
+		window.Polymer.dom = 'shadow';
+		window._ENV = "{{jekyll.environment}}";
+		window.LATEST_31T_EVENT = 'YYMMDD';
+	</script>
+	```
+
+### Deploy
+
+#### Dependencies
+- Node 8 (needs to be 8!): `nvm use 8`
+- Jekyll 3 (needs to be 3!): `gem install jekyll --version 3.0.0`
+
+#### Deploy to stage and test
+```
+nvm use 8
+npm run gulp -- deploy --environment=stage
+```
+
+Navigate to `http://app-stage.31t.org/` and see if the redirect happens.
+
+#### Deploy to production
+```
+nvm use 8
+npm run gulp -- deploy --environment=production
+```
+
+### If the upload fails
+If uploading all the images fail, better to upload them manually in S3.
+---------------------------------------
+
+# Instructions to run the event
+- System preferences >> Energy saver >> Turn display off = NEVER
+- Run on Google Chrome Browser
+- Connect computer to power supply
+- Open the tabs bellow
+- Have you browser on fullscreen
+
+#### Tab 1: Intro
+https://docs.google.com/presentation/d/XXXXXXXXXXXXX
+
+- Press `Shift` + `Cmd` + `Return` to start presentation from beginning
+- Press `Opt` + `Cmd` + `->` to switch to the next tab
+
+#### Tab 2: Live
+http://app.31t.org/live-combinations/?title=31T&interval=12#YYMMDD
+
+- Press `Opt` + `Cmd` + `->` to switch to the next tab
+
+#### Tab 3: Compilation
+http://app.31t.org/live-combinations/?title=31T&interval=3&created=0#YYMMDD
+
+- Press `Cmd` + `R` to refresh
+
+----------------------------------------
+
+# URLS
+
+#### App:
+http://app.31t.org/YYMMDD
+
+#### Projection (Live):
+http://app.31t.org/live-combinations/?title=31T&interval=20#YYMMDD
+
+#### Projection (Only best combinations):
+http://app.31t.org/live-combinations/?title=31T&interval=20&created=0&rating=4,5&loop=true#YYMMDD
+
+#### Compilation:
+http://app.31t.org/live-combinations/?title=31T&interval=3&created=0#YYMMDD
+
+----------------------------------------
 ## Dependecies
 - Nodejs
 - Npm
